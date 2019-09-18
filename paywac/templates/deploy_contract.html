@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="">
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Review contract data</legend>
+            Bunch of data here
+            {{ form.csrf_token }}
+            <div class="form-group">
+                {{ form.seller_address.label(class="form-control-label") }}
+                {% if form.seller_address.errors %}
+                    {{ form.seller_address(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.seller_address.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.seller_address(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-check">
+                {{ form.confirm.label(class="form-control-label") }}
+                {% if form.confirm.errors %}
+                    {{ form.confirm(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.confirm.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.confirm(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-inline">
+            {{ form.submit(class="btn btn-outline-info") }}
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Reject this contract</button>
+        </div>
+
+    </form>
+     <!-- Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Do you want to reject this contract?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <form action="{{ url_for('contracts.delete_contract', uid=uuid) }}" method="POST">
+            <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+        </div>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock content %}

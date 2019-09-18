@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+
+{% for contract in contracts%}
+
+<article class="media content-section">
+        <div class="media-body">
+          <div class="article-metadata">
+
+        </div>
+        <h2><a class="article-title" href="#">{{ contract.title }}</a></h2>
+        <p class="article-content">{{ contract.status }}</p>
+
+        {% if contract.status == 0%}
+
+            <a href='/intent/deploy_contract/{{contract.uuid}}' class="btn btn-primary">Review contract</a>
+
+        {% endif %}
+
+    </div>
+    </article>
+
+{% endfor %}
+
+{% endblock content%}
