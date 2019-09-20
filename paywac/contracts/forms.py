@@ -50,6 +50,7 @@ class ButtonData(FlaskForm):
 class DeliverTo(FlaskForm):
     # street address, country, state, postal code
     street = StringField('Street Address', validators=[DataRequired()])
+    city = StringField('City', validators=[DataRequired()])
     country = StringField('Country', validators=[DataRequired()])
     state = StringField('State', validators=[DataRequired()])
     postal_code = IntegerField('postal code', validators=[DataRequired()])

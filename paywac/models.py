@@ -122,6 +122,7 @@ class Button_data(db.Model, UserMixin):
     item_price = db.Column(db.Float, nullable=False)
     shipping_price = db.Column(db.Float, nullable=False)
     clicked = db.Column(db.Integer, nullable=False)
+    button_code = db.Column(db.String(), nullable=False)
 
 
     def __repr__():
@@ -133,6 +134,7 @@ class Shipping_info(db.Model, UserMixin):
     uuid = db.Column(db.String(), unique=True)
     seller_email = db.Column(db.String(), nullable=False)
     buyer_email = db.Column(db.String(), nullable=True)
+    city = db.Column(db.String(), nullable=True)
     street = db.Column(db.String(), nullable=False)
     country = db.Column(db.String(), nullable=False)
     state = db.Column(db.String(), nullable=False)

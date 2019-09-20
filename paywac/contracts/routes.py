@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint,
 from flask_login import login_user, current_user, logout_user, login_required
 from paywac import db, bcrypt
 from paywac.contracts.forms import CreateContract, ButtonData, DeliverTo, ReviewAndDeploy
-from paywac.contracts.utils import gas_to_eth, deploy
+from paywac.contracts.utils import gas_to_eth, deploy, secondsToText
 from paywac.models import Contracts_deployed, Deployer, Oracle, User, Contracts_info, Button_data, Shipping_info, Contracts
 from uuid import uuid4
 import os
@@ -11,6 +11,7 @@ from datetime import datetime
 
 contracts = Blueprint('contracts', __name__)
 
+# OLD
 @contracts.route('/intent/new_contract', methods=['GET', 'POST'])
 @login_required
 def new_contract():
@@ -96,7 +97,7 @@ def new_contract():
     result = gas_to_eth(695333, 9)
     return render_template('create_contract.html', form=form)
 
-# retrieve and display the contract info and more
+
 # TODO modify with the new implementation
 @contracts.route('/contract/<string:address>')
 def contract(address):
@@ -144,13 +145,6 @@ def create_button():
     # the uuid will be the id that we will search in the table to retrieve all the data needed later
     if form.validate_on_submit():
 
-        # insert button data in the database
-        row = Button_data(uuid=uuid, creator_mail=current_user.email, name=form.name.data, title=form.title.data, seller_address=form.seller_address.data, contract_time=form.contract_time.data,\
-                            shipping_eta=form.shipping_eta.data, item_price=form.item_price.data, shipping_price=form.shipping_price.data, clicked=0)
-
-        db.session.add(row)
-        db.session.commit()
-
         if form.name.data:
             button_html = f"""
             <a class="button" href="http://127.0.0.1:5000/intent/buy?uid={uuid}" data-size="large">
@@ -165,7 +159,15 @@ def create_button():
                 </a>
             """
 
-        return render_template('button_creation.html',display_form=False, form=form, generated_code=button_html )
+            # insert button data in the database
+        row = Button_data(uuid=uuid, creator_mail=current_user.email, name=form.name.data, title=form.title.data, seller_address=form.seller_address.data, contract_time=form.contract_time.data,\
+                            shipping_eta=form.shipping_eta.data, item_price=form.item_price.data, shipping_price=form.shipping_price.data, clicked=0,\
+                            button_code=button_html)
+
+        db.session.add(row)
+        db.session.commit()
+
+        return render_template('button_creation.html',display_form=False, form=form, generated_code=button_html)
 
     # LATER STEPS: when a request will be made we check for every value to match the insertion in the database, if
     # there will be a match we get the uuid and we create the request for the seller
@@ -185,15 +187,15 @@ def buy():
         # change the status of the button, it will not be able to make another request for this button
         row.clicked = 1
         creator_mail = row.creator_mail
-        # TODO display a summary for the data inside the Button data row
-
+        contract_time_formatted = secondsToText(row.contract_time)
+        shipping_eta_formatted = secondsToText(row.shipping_eta)
         # form with the info that the user has to input(shipping address)
         form = DeliverTo()
         # confirmation, and creation of buy_request that the seller will review and accept(or that accepts automaticaly if setted to do so)
         if form.validate_on_submit():
             # add the shipping info binded to the uid to the database
             shipping_row = Shipping_info(uuid=uid, seller_email=creator_mail, buyer_email=form.email.data, street=form.street.data,\
-                                            country=form.country.data, state=form.state.data, postal_code=form.postal_code.data)
+                                            city=form.city.data, country=form.country.data, state=form.state.data, postal_code=form.postal_code.data)
             # create new contract in pending seller approval status
             contract_row = Contracts(uuid=uid, name=row.name, title=row.title, owner=creator_mail, seller_address=row.seller_address,\
                                         contract_time=row.contract_time, shipping_eta=row.shipping_eta, item_price=row.item_price,\
@@ -205,8 +207,11 @@ def buy():
             # buyer will recieve a email when the contract is actually deployed, this will redirect him to the contract page where he will be
             # able to see the contract address and provide the payment
             flash('Your request has been submitted successfully, please wait on your email for a notification with the payment info', 'success')
+            # TODO send email notification to the seller
             return redirect(url_for('main.home'))
-        return render_template('buy.html', response="info about the object", form=form)
+        return render_template('buy.html', response="info about the item", form=form, insertion_link=row.name, insertion_title=row.title,\
+                                seller_address=row.seller_address, contract_time=contract_time_formatted, shipping_eta=shipping_eta_formatted,\
+                                    item_price=row.item_price, shipping_price=row.shipping_price)
     elif row == None:
         flash("This request does not exists", 'danger')
         return redirect(url_for('main.home'))
@@ -231,28 +236,77 @@ def deploy_contract(uid):
     shipping_info = Shipping_info.query.filter_by(uuid=uid).first()
     contract_owner = contract.owner
     contract_status = contract.status
-    if current_user.email == contract_owner and contract_status == 0:
+    contract_time = contract.contract_time
+    contract_shipping_eta = contract.shipping_eta
+    contract_item_price = contract.item_price
+    contract_shipping_price = contract.shipping_price
+    oracle = Oracle.query.filter(Oracle.active==1).first().address
+    deployer = Deployer.query.filter(Deployer.active==1).first().address
+    user_wac = User.query.filter_by(email=current_user.email).first()
 
-        # TODO display all the info about this contract
-        # shipping related info
-        # contract related info
+    if current_user.email == contract_owner and contract_status == 0:
 
         # form that require the user to accept and let the user submit and doing so the contract will be deployed
         form = ReviewAndDeploy()
         form.seller_address.data = contract.seller_address
 
-        if form.validate_on_submit():
-            # deploy contract on ethereum using previous version logic
-            # TODO update all the paths and scripts for new contract structure
-            pass
+        if form.validate_on_submit() and user_wac.wac_credits > 0:
+            # reduce by one the deployment count for the user
+            user_wac.wac_credits -= 1
+            db.session.add(user_wac)
 
-            # change status from 0 to 1
-            contract.status = 1
-            db.session.commit()
-            flash('Contract Deployed successfully', 'success')
-            return redirect(url_for('main.home'))
+            # deploy contract on ethereum and collect response info(contract address ecc)
+            try:
+            
+                tx_receipt = deploy(deployer, form.seller_address.data, oracle, contract_time, contract_shipping_eta, contract_item_price, contract_shipping_price)
+                
+                contract_address = tx_receipt.get('contractAddress')
+                # get the transaction status, 1 if the transaction succede, 0 if not, if we have a 0
+                # an error will be reported
+                transaction_status = tx_receipt.get('status')
+                # get the block where the transaction is inside
+                block_number = tx_receipt.get('blockNumber')
+                # the gas used for the transaction
+                gas_used = tx_receipt.get('gasUsed')
 
-        return render_template('deploy_contract.html', form=form, uuid=uid)
+                if transaction_status == 0:
+                    # there was an error with the transaction that creates the contract, in this case we will signal the error to the user
+                    # and an email with priority max will be sent to the tech support to fix the issue
+                    flash("Contract creation went wrong", 'danger')
+                    return redirect(url_for('main.home'))
+
+                # change status from 0 to 1
+                contract.status = 1
+                contract.contract_address = contract_address
+                contract.deployed_date = datetime.now()
+                db.session.commit()
+                
+                # TODO execute the cronjob funcion one time manually to have immediately some data to display
+
+                # create cronjob for that reads the data inside the contract and insert it into the database
+                try:
+                    cron = CronTab(user='andrea')
+                    job = cron.new(command=f'/home/andrea/anaconda3/envs/vyper/bin/python /home/andrea/Desktop/paywac_website_v02/cronjob_scripts/cron_update_info_paywac.py {contract_address} > /home/andrea/Desktop/paywac_website_v02/logs/cron.log 2>&1')
+                    job.minute.every(15)
+
+                    cron.write()
+                except:
+                    print("error creating the cronjob for the newly deployed contract")
+
+                flash('Contract Deployed successfully', 'success')
+
+                # TODO send email notification to the buyer
+                return redirect(url_for('main.home'))
+            except:
+                flash("Error Deploying the contract","danger")
+
+        elif form.validate_on_submit() and user_wac.wac_credits == 0:
+            flash('You dont have enough founds to deploy a contract','warning')
+            # TODO add instructions to add tokens for contract deployment
+        
+        return render_template('deploy_contract.html', form=form, uuid=uid, insertion_link=contract.name, insertion_title=contract.title, seller_address=contract.seller_address,\
+                                contract_time=secondsToText(contract.contract_time), shipping_eta=secondsToText(contract.shipping_eta), item_price=contract.item_price, shipping_price=contract.shipping_price,\
+                                    city=shipping_info.city, street=shipping_info.street, country=shipping_info.country, state=shipping_info.state, postal_code=shipping_info.postal_code)
     elif current_user.email == contract_owner and contract_status != 0:
         flash("This contract has already been deployed")
         return redirect(url_for('main.home'))
@@ -266,7 +320,16 @@ def deploy_contract(uid):
 @login_required
 def my_contracts():
     rows = Contracts.query.filter_by(owner=current_user.email).all()
+    # TODO if the contract is not in status 0 we will display for each contract a button that contains shipping info
+    # and a form to add the tracking number if the contract is in status 2 (item payed)
     return render_template('my_contracts.html', contracts=rows)
+
+# display a list of the buttons wich you are the owner of
+@contracts.route("/my_buttons")
+@login_required
+def my_buttons():
+    rows = Button_data.query.filter_by(creator_mail=current_user.email).all()
+    return render_template('my_buttons.html', buttons=rows)
 
 # this can be called only from the seller and will allow him to reject the contract creation after a user
 # has submitted a payment promess

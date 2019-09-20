@@ -1,19 +1,24 @@
-body {
-  background: #fafafa;
-  color: #333333;
-  margin-top: 5rem;
+@font-face {
+  font-family: myFirstFont;
+  src: url("fonts/Chewy-Regular.ttf");
 }
 
+body {
+  background: #e0e0e0;
+  color: #333333;
+  margin-top: 5rem;
+  opacity: 1;
+}
 h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
-
+/* #5f788a */
 .bg-steel {
-  background-color: #5f788a;
+  background-color: #fafafa;
 }
 
 .site-header .navbar-nav .nav-link {
-  color: #cbd5db;
+  color: #f5f5f5;
 }
 
 .site-header .navbar-nav .nav-link:hover {
@@ -24,12 +29,18 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
 }
 
+.navbar-custom {
+  background-color: #343434;
+  /* background-image: url("navbar/wearecrypto.png") */
+}
+
 .content-section {
-  background: #ffffff;
   padding: 10px 20px;
-  border: 1px solid #dddddd;
-  border-radius: 3px;
+  border: grey;
+  border-radius: 40px;
   margin-bottom: 20px;
+  background: rgb(241, 241, 241);
+  /* background-image: url("css_images/image.png"); */
 }
 
 .article-title {
@@ -76,5 +87,432 @@ a.article-title:hover {
 }
 
 .account-heading {
-  font-size: 2.5rem;
+  font-size: 16pt;
+}
+
+.navbar-brand {
+  font-family: myFirstFont;
+  font-size: 28pt;
+  transform: translateX(-50%);
+  left: 50%;
+  position: absolute;
+}
+
+.search{
+    float:left;
+}
+
+.Fixed
+{
+  position: fixed;
+  top: 20px;
+}
+/* .center{
+   padding: 50px;
+} */
+
+.content-preview {
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+max-width: 200px;
+}
+
+img{
+border-radius: 25px;
+}
+
+.box {
+display: flex;
+align-items:center;
+}
+.no-crypto {
+font-family: myFirstFont;
+font-size: 13pt;
+}
+.crypto {
+font-family: myFirstFont;
+font-size: 13pt;
+}
+.crypto-title {
+font-family: myFirstFont;
+font-size: 22pt;
+}
+
+.crypto-title-about {
+font-family: myFirstFont;
+font-size: 36pt;
+color: #1d35c0;
+}
+
+.title-box{
+text-align: center;
+}
+
+.center {
+display: block;
+margin-left: auto;
+margin-right: auto;
+width: 80pt;
+height: 80pt;
+}
+
+* {box-sizing:border-box}
+
+/* Slideshow container */
+.slideshow-container {
+max-width: 1000px;
+position: relative;
+margin: auto;
+}
+
+/* Hide the images by default */
+.mySlides {
+display: none;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+cursor: pointer;
+position: absolute;
+top: 50%;
+width: auto;
+margin-top: -22px;
+padding: 16px;
+color: white;
+font-weight: bold;
+font-size: 18px;
+transition: 0.6s ease;
+border-radius: 0 3px 3px 0;
+user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+right: 0;
+border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+background-color: #428bca;
+}
+
+/* Caption text */
+.text {
+color: #f2f2f2;
+font-size: 15px;
+padding: 8px 12px;
+position: absolute;
+bottom: 8px;
+width: 100%;
+text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+color: #f2f2f2;
+font-size: 12px;
+padding: 8px 12px;
+position: absolute;
+top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+cursor: pointer;
+height: 15px;
+width: 15px;
+margin: 0 2px;
+background-color: #bbb;
+border-radius: 50%;
+display: inline-block;
+transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+background-color: #428bca;
+}
+
+/* Fading animation */
+.fade {
+-webkit-animation-name: fade;
+-webkit-animation-duration: 1.5s;
+animation-name: fade;
+animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+from {opacity: .4} 
+to {opacity: 1}
+}
+
+@keyframes fade {
+from {opacity: .4} 
+to {opacity: 1}
+}
+
+.wordWrap {
+word-wrap: break-word;      /* IE 5.5-7 */
+white-space: -moz-pre-wrap; /* Firefox 1.0-2.0 */
+white-space: pre-wrap;      /* current browsers */
+}
+
+.custom-control-label::before, 
+.custom-control-label::after {
+  top: .8rem;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.loading-text {
+font-family: myFirstFont;
+font-size: 28pt;
+}
+
+.loading-overlay {
+position: absolute;
+top: 50%;
+left: 46%;
+width: 100%;
+height: 100%;
+z-index: 9999;
+}
+.loading-overlay > .inner
+{
+position: absolute;
+top: 46%;
+left: 50%;
+}
+
+.result-text{
+font-size: 24pt;
+font-weight: bold;
+}
+
+.about-text{
+font-size: 18pt;
+font-weight: bold;
+}
+
+.donation-text{
+font-size: 10pt;
+font-weight: bold;
+}
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
+
+.box-legend {
+display: flex;
+}
+
+input[type=checkbox] {
+transform: scale(1.3);
+}
+
+.row{
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto{
+
+  padding-left: 0px;
+  padding-right: 0px;
+
+}
+
+
+.skeleton-insertion{
+
+margin: auto;
+  width: 500px;
+  height: 600px; /* change height to see repeat-y behavior */
+  
+  background-image:
+    radial-gradient( circle 50px at 50px 50px, lightgray 99%, transparent 0 ),
+    linear-gradient( 100deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 80% ),
+    linear-gradient( lightgray 20px, transparent 0 ),
+    linear-gradient( lightgray 20px, transparent 0 ),
+    linear-gradient( lightgray 20px, transparent 0 ),
+    linear-gradient( lightgray 20px, transparent 0 );
+
+  background-repeat: repeat-y;
+
+  background-size:
+    100px 200px, /* circle */
+    50px 200px, /* highlight */
+    150px 200px,
+    350px 200px,
+    300px 200px,
+    250px 200px;
+
+  background-position:
+    0 0, /* circle */
+    0 0, /* highlight */
+    120px 0,
+    120px 40px,
+    120px 80px,
+    120px 120px;
+
+  animation: shine 1s infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position:
+      0 0,
+      100% 0, /* move highlight to right */
+      120px 0,
+      120px 40px,
+      120px 80px,
+      120px 120px;
+  }
+}
+
+.square-meta{
+
+  width: 100pt;
+  height: 10pt;
+  border-radius: 25pt;
+  animation-name: breath;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+
+}
+
+.square-title{
+
+width: 260pt;
+height: 12pt;
+margin:0 auto;
+border-radius: 25pt;
+animation-name: breath;
+animation-duration: 1s;
+animation-iteration-count: infinite;
+animation-direction: alternate;
+
+}
+
+.square-image{
+
+width: 200pt;
+height: 200pt;
+margin:0 auto;
+border-radius: 25pt;
+animation-name: breath;
+animation-duration: 1s;
+animation-iteration-count: infinite;
+animation-direction: alternate;
+
+}
+
+.square-coins{
+
+width: 100pt;
+height: 10pt;
+margin:0 auto;
+border-radius: 25pt;
+animation-name: breath;
+animation-duration: 1s;
+animation-iteration-count: infinite;
+animation-direction: alternate;
+
+}
+
+.square-description{
+
+width: 100%;
+height: 140pt;
+margin:0 auto;
+border-radius: 25pt;
+animation-name: breath;
+animation-duration: 1s;
+animation-iteration-count: infinite;
+animation-direction: alternate;
+
+}
+
+.square-image-small{
+float:left; 
+margin-left:-10px; 
+margin-right:10px; 
+width:200px; 
+height:200px;
+border-radius: 25pt;
+animation-name: breath;
+animation-duration: 1s;
+animation-iteration-count: infinite;
+animation-direction: alternate;
+
+}
+
+.square-title-small{
+
+width: 90%;
+height: 12pt;
+margin:0 auto;
+border-radius: 25pt;
+animation-name: breath;
+animation-duration: 1s;
+animation-iteration-count: infinite;
+animation-direction: alternate;
+
+}
+
+.square-price{
+
+width: 65%;
+height: 12pt;
+margin:0 auto;
+border-radius: 25pt;
+animation-name: breath;
+animation-duration: 1s;
+animation-iteration-count: infinite;
+animation-direction: alternate;
+
+}
+.square-accepted{
+width: 70%;
+height: 12pt;
+margin:0 auto;
+border-radius: 25pt;
+animation-name: breath;
+animation-duration: 1s;
+animation-iteration-count: infinite;
+animation-direction: alternate;
+
+}
+
+.square-blank{
+
+background-color: rgba(143, 143, 143, 0);
+width: 50%;
+height: 14pt;
+margin:0 auto;
+border-radius: 25pt;
+
+}
+@keyframes breath {
+from {background-color: rgba(143, 143, 143, 0.2);}
+to {background-color: rgba(143, 143, 143, 0.8);}
 }

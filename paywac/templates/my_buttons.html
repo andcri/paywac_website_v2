@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block content %}
+
+{% for button in buttons%}
+
+<article class="media content-section">
+        <div class="media-body">
+          <div class="article-metadata">
+
+        </div>
+        <h2><a class="article-title" href="#">{{ button.title }}</a></h2>
+        <p class="article-content">{{ button.clicked }}</p>
+
+        <textarea style="opacity: 0" readonly id="generated_code">{{ button.button_code }}</textarea>
+        <p></p>
+        <button onclick="myFunction()">Copy text</button>
+        </div>
+
+    </article>
+
+{% endfor %}
+
+<script>
+    function myFunction() {
+        /* Get the text field */
+        var copyText = document.getElementById("generated_code");
+
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+
+        /* Alert the copied text */
+        alert("Copied the text: " + copyText.value);
+    }
+</script>
+
+{% endblock content%}

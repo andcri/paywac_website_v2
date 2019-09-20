@@ -4,7 +4,41 @@
     <form method="POST" action="">
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">Review contract data</legend>
-            Bunch of data here
+            <div class="form-inline">
+                <div class="dropdown">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Check Shipping Info
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {% if insertion_link != ''%}
+                            <a class="dropdown-item" href="https://{{insertion_link}}">Insertion Link: {{ insertion_link }}</a>
+                        {% endif %}
+                        <a class="dropdown-item">Street: {{ street }}</a>
+                        <a class="dropdown-item">City: {{ city }}</a>
+                        <a class="dropdown-item">Country: {{ country }}</a>
+                        <a class="dropdown-item">State: {{ state }}</a>
+                        <a class="dropdown-item">Postal Code: {{ postal_code }}</a>
+                    </div>
+                </div>
+                <!-- add span with blank space --> ==
+                <div class="dropdown">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Check Contract Info
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {% if insertion_link != ''%}
+                            <a class="dropdown-item" href="{{insertion_link}}">Insertion Title: {{ insertion_link }}</a>
+                        {% endif %}
+                        <a class="dropdown-item">Insertion Title: {{ insertion_title }}</a>
+                        <a class="dropdown-item">Seller Address: {{ seller_address }}</a>
+                        <a class="dropdown-item">Contract Time(time that you have to make the payment): {{ contract_time }}</a>
+                        <a class="dropdown-item">Shipping Time(start after you make the payment): {{ shipping_eta }}</a>
+                        <a class="dropdown-item">Item Price: {{ item_price }}</a>
+                        <a class="dropdown-item">Shipping Price: {{ shipping_price }}</a>
+                        <a class="dropdown-item">Total Price To Pay: {{ shipping_price + item_price}}</a>
+                    </div>
+                </div>
+            </div>
             {{ form.csrf_token }}
             <div class="form-group">
                 {{ form.seller_address.label(class="form-control-label") }}

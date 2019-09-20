@@ -19,15 +19,15 @@ def gas_to_eth(gas_ammount, gas_price=10):
     return eth_amount
 
 # deploy the contract to the rinkeby network
-def deploy(deployer, seller, buyer, oracle, contract_time, contract_shipping_eta, item_price):
+def deploy(deployer, seller, oracle, contract_time, contract_shipping_eta, item_price, shipping_price):
 
     deployer = Web3.toChecksumAddress(deployer)
     seller = Web3.toChecksumAddress(seller)
-    buyer = Web3.toChecksumAddress(buyer)
     oracle = Web3.toChecksumAddress(oracle)
 
-    # convert item price to wei
+    # convert item price and shipping price to wei
     item_price = Web3.toWei(item_price, 'ether')
+    shipping_price = Web3.toWei(shipping_price, 'ether')
 
     # load json file
     with open('paywac/static/contracts_code/build/paywac.json') as json_file:
@@ -54,17 +54,10 @@ def deploy(deployer, seller, buyer, oracle, contract_time, contract_shipping_eta
         encrypted_key = keyfile.read()
         private_key = w3.eth.account.decrypt(encrypted_key, password)
 
-    # calculate fee based on item price
-    fee = int((item_price * 0.8) / 100)
     nonce = w3.eth.getTransactionCount(Web3.toChecksumAddress(from_account))
-    print(nonce)
-
-    # transaction_price_estimate = Contract.constructor(deployer, seller, buyer, oracle, contract_time, contract_shipping_eta, item_price, fee).estimateGas()
-    # print(transaction_price_estimate)
-    # print(Web3.toChecksumAddress(from_account))
 
     # build transaction
-    transaction = Contract.constructor(deployer, seller, buyer, oracle, contract_time, contract_shipping_eta, item_price, fee)\
+    transaction = Contract.constructor(deployer, seller, oracle, contract_time, contract_shipping_eta, item_price, shipping_price)\
                 .buildTransaction({'from': Web3.toChecksumAddress(from_account),\
                                     'gas' : 2000000,\
                                     'gasPrice' : w3.toWei('10', 'gwei'),\
@@ -76,3 +69,14 @@ def deploy(deployer, seller, buyer, oracle, contract_time, contract_shipping_eta
     tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
     print(tx_receipt)
     return tx_receipt
+
+def secondsToText(secs):
+    days = secs//86400
+    hours = (secs - days*86400)//3600
+    minutes = (secs - days*86400 - hours*3600)//60
+    seconds = secs - days*86400 - hours*3600 - minutes*60
+    result = ("{} days, ".format(days) if days else "") + \
+    ("{} hours, ".format(hours) if hours else "") + \
+    ("{} minutes, ".format(minutes) if minutes else "") + \
+    ("{} seconds, ".format(seconds) if seconds else "")
+    return result
