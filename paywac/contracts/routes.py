@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint, request
 from flask_login import login_user, current_user, logout_user, login_required
 from paywac import db, bcrypt
-from paywac.contracts.forms import CreateContract, ButtonData, DeliverTo, ReviewAndDeploy
+from paywac.contracts.forms import CreateContract, ButtonData, DeliverTo, ReviewAndDeploy, ShippingNumber
 from paywac.contracts.utils import gas_to_eth, deploy, secondsToText
 from paywac.models import Contracts_deployed, Deployer, Oracle, User, Contracts_info, Button_data, Shipping_info, Contracts
 from uuid import uuid4
@@ -106,13 +106,13 @@ def contract(address):
     from the contract_info table
     """
     # data from the contracts deployed
-    row = Contracts_deployed.query.filter_by(contract_address=address).first()
+    row = Contracts.query.filter_by(contract_address=address).first()
     # extract the data from the database
-    request_id = row.request_id
-    contract_name = row.contract_name
-    seller = row.seller
-    buyer = row.buyer
+    uid = row.uuid
+    contract_name = row.name
+    seller = row.seller_address
     price = row.item_price
+    shipping_price = row.shipping_price
     status = row.status
 
     # data from the contracts info
@@ -123,7 +123,8 @@ def contract(address):
     has_buyer_paid = row_info.has_buyer_paid
     ranking = row_info.ranking
 
-    return render_template('contract.html')
+    return render_template('contract.html', contract_start=contract_start, contract_end=contract_end, time_item_delivered=time_item_delivered,\
+                            has_buyer_paid=has_buyer_paid, ranking=ranking)
 
 
 # generate the html code for a button that will be embedded to a third party website to create a request for a new contract
@@ -281,8 +282,9 @@ def deploy_contract(uid):
                 contract.deployed_date = datetime.now()
                 db.session.commit()
                 
-                # TODO execute the cronjob funcion one time manually to have immediately some data to display
-
+                # execute the cronjob funcion one time manually to have immediately some data to display
+                # TO BE TESTED
+                
                 # create cronjob for that reads the data inside the contract and insert it into the database
                 try:
                     cron = CronTab(user='andrea')
@@ -322,7 +324,11 @@ def my_contracts():
     rows = Contracts.query.filter_by(owner=current_user.email).all()
     # TODO if the contract is not in status 0 we will display for each contract a button that contains shipping info
     # and a form to add the tracking number if the contract is in status 2 (item payed)
-    return render_template('my_contracts.html', contracts=rows)
+    form = ShippingNumber()
+    if form.validate_on_submit():
+        # TODO start shipment tracking cronjob
+        pass
+    return render_template('my_contracts.html', contracts=rows, form=form)
 
 # display a list of the buttons wich you are the owner of
 @contracts.route("/my_buttons")

@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+<!-- TODO add a bar that shows the ammout of deployment avaiable and a button to get more deployment -->
 <div class="content-section">
     <form method="POST" action="">
         <fieldset class="form-group">
@@ -10,9 +11,6 @@
                         Check Shipping Info
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        {% if insertion_link != ''%}
-                            <a class="dropdown-item" href="https://{{insertion_link}}">Insertion Link: {{ insertion_link }}</a>
-                        {% endif %}
                         <a class="dropdown-item">Street: {{ street }}</a>
                         <a class="dropdown-item">City: {{ city }}</a>
                         <a class="dropdown-item">Country: {{ country }}</a>
@@ -30,7 +28,7 @@
                             <a class="dropdown-item" href="{{insertion_link}}">Insertion Title: {{ insertion_link }}</a>
                         {% endif %}
                         <a class="dropdown-item">Insertion Title: {{ insertion_title }}</a>
-                        <a class="dropdown-item">Seller Address: {{ seller_address }}</a>
+                        <a class="dropdown-item">Receiving Address: {{ seller_address }}</a>
                         <a class="dropdown-item">Contract Time(time that you have to make the payment): {{ contract_time }}</a>
                         <a class="dropdown-item">Shipping Time(start after you make the payment): {{ shipping_eta }}</a>
                         <a class="dropdown-item">Item Price: {{ item_price }}</a>

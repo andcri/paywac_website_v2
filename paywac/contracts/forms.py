@@ -65,3 +65,9 @@ class ReviewAndDeploy(FlaskForm):
     seller_address = StringField('The Ethereum address where you want to be payed', validators=[DataRequired(), Length(min=40, max=42)])
     confirm = BooleanField('I have reviewed the data and i want to deploy the contract', validators=[DataRequired()])
     submit = SubmitField('Deploy the contract')
+
+# let seller add the shipping number
+class ShippingNumber(FlaskForm):
+    tracking_number = StringField('Your Tracking number', validators=[DataRequired()])
+    shipper = SelectField('Shipping Company', choices=[('DHL', 'DHL')])
+    submit = SubmitField('Add Tracking Number')

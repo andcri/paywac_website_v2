@@ -1,25 +1,278 @@
 {% extends "layout.html" %}
 {% block content %}
 
+<button class="btn btn-secondary" type="button" onclick="showToDeploy()">
+    To Deploy</button>
+  <button class="btn btn-secondary" type="button" onclick="showWaitingPayment()">
+      Waiting for Payment</button>
+<button class="btn btn-secondary" type="button" onclick="showToShip()">
+    To Ship</button>
+<button class="btn btn-secondary" type="button" onclick="showDelivered()">
+    Delivered</button>
+<button class="btn btn-secondary" type="button" onclick="showRefounded()">
+    Refounded</button>
+
+<p></p>
 {% for contract in contracts%}
 
-<article class="media content-section">
-        <div class="media-body">
-          <div class="article-metadata">
+<!-- to deploy -->
+{% if contract.status == 0%}
+<div class="to_deploy">
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
 
-        </div>
-        <h2><a class="article-title" href="#">{{ contract.title }}</a></h2>
-        <p class="article-content">{{ contract.status }}</p>
+      </div>
+      <h2><a class="article-title" href="#">{{ contract.title }}</a></h2>
+      <p class="article-content">{{ contract.status }}</p>
 
-        {% if contract.status == 0%}
-
-            <a href='/intent/deploy_contract/{{contract.uuid}}' class="btn btn-primary">Review contract</a>
-
-        {% endif %}
+      <a href='/intent/deploy_contract/{{contract.uuid}}' class="btn btn-primary">Review contract</a>  
 
     </div>
-    </article>
+  </article>
+</div>
 
+<!-- deployed waiting for paiment -->
+{% elif contract.status == 1%}
+<div class="waiting_payment">
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+
+      </div>
+      <h2><a class="article-title" href="#">{{ contract.title }}</a></h2>
+      <p class="article-content">{{ contract.status }}</p> 
+
+    </div>
+  </article>
+</div>
+<!-- payed to ship -->
+{% elif contract.status == 2%}
+<div class="paied">
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+
+      </div>
+      <h2><a class="article-title" href="#">{{ contract.title }}</a></h2>
+      <p class="article-content">{{ contract.status }}</p>
+
+      <h5>Add tracking number to this contract</h5>
+        <form method="POST" action="">
+            <fieldset class="form-group">
+                {{ form.csrf_token }}
+                <div class="form-inline">
+                    {% if form.tracking_number.errors %}
+                        {{ form.tracking_number(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.tracking_number.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.tracking_number(class="form-control form-control-lg") }}
+                    {% endif %}
+                    {% if form.shipper.errors %}
+                        {{ form.shipper(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.shipper.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.shipper(class="form-control form-control-lg") }}
+                    {% endif %}
+                    {{ form.submit(class="btn btn-outline-secondary") }}
+                </div>
+            </fieldset>
+        </form>
+
+    </div>
+  </article>
+</div>
+<!-- delivered -->
+{% elif contract.status == 3%}
+<div class="delivered">
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+
+      </div>
+      <h2><a class="article-title" href="#">{{ contract.title }}</a></h2>
+      <p class="article-content">{{ contract.status }}</p> 
+
+    </div>
+  </article>
+</div>
+<!-- refounded -->
+{% elif contract.status == 4%}
+<div class="refounded">
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+
+      </div>
+      <h2><a class="article-title" href="#">{{ contract.title }}</a></h2>
+      <p class="article-content">{{ contract.status }}</p> 
+
+    </div>
+  </article>
+</div>
+{% endif %}
 {% endfor %}
+
+<script>
+
+function showToDeploy(){
+  var to_deploy = document.getElementsByClassName('to_deploy');
+  var waiting_payment = document.getElementsByClassName('waiting_payment');
+  var paied_to_ship = document.getElementsByClassName('paied_to_ship');
+  var delivered = document.getElementsByClassName('delivered');
+  var refounded = document.getElementsByClassName('refounded');
+
+  for(var i = 0; i < to_deploy.length; i++)
+  {
+    to_deploy[i].style.display="block";
+  }
+  for(var i = 0; i < waiting_payment.length; i++)
+  {
+    waiting_payment[i].style.display="none";
+  }
+  for(var i = 0; i < paied_to_ship.length; i++)
+  {
+    paied_to_ship[i].style.display="none";
+  }
+  for(var i = 0; i < delivered.length; i++)
+  {
+    delivered[i].style.display="none";
+  }
+  for(var i = 0; i < refounded.length; i++)
+  {
+    refounded[i].style.display="none";
+  }
+
+}
+function showWaitingPayment(){
+  console.log('here')
+
+  var to_deploy = document.getElementsByClassName('to_deploy');
+  var waiting_payment = document.getElementsByClassName('waiting_payment');
+  var paied_to_ship = document.getElementsByClassName('paied_to_ship');
+  var delivered = document.getElementsByClassName('delivered');
+  var refounded = document.getElementsByClassName('refounded');
+
+  for(var i = 0; i < to_deploy.length; i++)
+  {
+    to_deploy[i].style.display="none";
+  }
+  for(var i = 0; i < waiting_payment.length; i++)
+  {
+    waiting_payment[i].style.display="block";
+  }
+  for(var i = 0; i < paied_to_ship.length; i++)
+  {
+    paied_to_ship[i].style.display="none";
+  }
+  for(var i = 0; i < delivered.length; i++)
+  {
+    delivered[i].style.display="none";
+  }
+  for(var i = 0; i < refounded.length; i++)
+  {
+    refounded[i].style.display="none";
+  }
+
+
+}
+function showToShip(){
+
+  var to_deploy = document.getElementsByClassName('to_deploy');
+  var waiting_payment = document.getElementsByClassName('waiting_payment');
+  var paied_to_ship = document.getElementsByClassName('paied_to_ship');
+  var delivered = document.getElementsByClassName('delivered');
+  var refounded = document.getElementsByClassName('refounded');
+
+  for(var i = 0; i < to_deploy.length; i++)
+  {
+    to_deploy[i].style.display="none";
+  }
+  for(var i = 0; i < waiting_payment.length; i++)
+  {
+    waiting_payment[i].style.display="none";
+  }
+  for(var i = 0; i < paied_to_ship.length; i++)
+  {
+    paied_to_ship[i].style.display="block";
+  }
+  for(var i = 0; i < delivered.length; i++)
+  {
+    delivered[i].style.display="none";
+  }
+  for(var i = 0; i < refounded.length; i++)
+  {
+    refounded[i].style.display="none";
+  }
+}
+function showDelivered(){
+
+  var to_deploy = document.getElementsByClassName('to_deploy');
+  var waiting_payment = document.getElementsByClassName('waiting_payment');
+  var paied_to_ship = document.getElementsByClassName('paied_to_ship');
+  var delivered = document.getElementsByClassName('delivered');
+  var refounded = document.getElementsByClassName('refounded');
+
+  for(var i = 0; i < to_deploy.length; i++)
+  {
+    to_deploy[i].style.display="none";
+  }
+  for(var i = 0; i < waiting_payment.length; i++)
+  {
+    waiting_payment[i].style.display="none";
+  }
+  for(var i = 0; i < paied_to_ship.length; i++)
+  {
+    paied_to_ship[i].style.display="none";
+  }
+  for(var i = 0; i < delivered.length; i++)
+  {
+    delivered[i].style.display="block";
+  }
+  for(var i = 0; i < refounded.length; i++)
+  {
+    refounded[i].style.display="none";
+  }
+}
+function showRefounded(){
+
+  var to_deploy = document.getElementsByClassName('to_deploy');
+  var waiting_payment = document.getElementsByClassName('waiting_payment');
+  var paied_to_ship = document.getElementsByClassName('paied_to_ship');
+  var delivered = document.getElementsByClassName('delivered');
+  var refounded = document.getElementsByClassName('refounded');
+
+  for(var i = 0; i < to_deploy.length; i++)
+  {
+    to_deploy[i].style.display="none";
+  }
+  for(var i = 0; i < waiting_payment.length; i++)
+  {
+    waiting_payment[i].style.display="none";
+  }
+  for(var i = 0; i < paied_to_ship.length; i++)
+  {
+    paied_to_ship[i].style.display="none";
+  }
+  for(var i = 0; i < delivered.length; i++)
+  {
+    delivered[i].style.display="none";
+  }
+  for(var i = 0; i < refounded.length; i++)
+  {
+    refounded[i].style.display="block";
+  }
+}
+
+
+</script>
 
 {% endblock content%}

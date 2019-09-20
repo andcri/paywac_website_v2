@@ -1,14 +1,51 @@
 {% extends "layout.html" %}
 {% block content %}
-Contract started
-<p>{{ contract_start }}</p>
-Contract will end
-<p>{{ contract_end }}</p>
-Time of delivery
-<p>{{ time_item_delivered }}</p>
-
-<p>{{ has_buyer_paid }}</p>
-<p>{{ paid_ammount }}</p>
-<p>{{ refounded }}</p>
-<p>{{ ranking }}</p>
+<article class="media content-section" style="background-image: url('../static/images/background.jpg');">
+    <div class="media-body">
+        <div class="row justify-content-md-center">
+            <div class="col col-lg">
+                <img src="../static/images/ehtereum-color.png" style="width: 90%">
+            </div>
+            <div class="col col-auto">
+                Title
+                <!-- <p>{{ contract_start }}</p>
+                Contract will end
+                <p>{{ contract_end }}</p>
+                Time of delivery
+                <p>{{ time_item_delivered }}</p>
+                
+                <p>{{ has_buyer_paid }}</p>
+                <p>{{ paid_ammount }}</p>
+                <p>{{ refounded }}</p>
+                <p>{{ ranking }}</p> -->
+                <p></p>
+                Address
+            </div>
+            <div class="col col-lg">
+            </div>
+        </div>
+        <div class="row justify-content-md-center">
+            <div class="col col-lg">
+                Started
+            </div>
+            <div class="col col-auto">
+                Ending
+            </div>
+            <div class="col col-lg">
+            </div>
+        </div>
+        <p></p>
+        <div class="row justify-content-md-center">
+            <div class="col col-lg">
+                Status
+            </div>
+            <div class="col col-auto">
+                Last Update
+            </div>
+            <div class="col col-lg">
+            </div>
+        </div>
+        <!-- Here i start to check for the status -->
+    </div>
+</article>
 {% endblock content %}

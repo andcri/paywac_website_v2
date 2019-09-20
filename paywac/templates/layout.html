@@ -57,8 +57,9 @@
       </nav>
     </header>
     <main role="main" class="container">
-      <div class="row">
-        <div class="col-md-8">
+      <div class="row justify-content-md-center">
+        <div class="col col-lg"></div>
+        <div class="col-md-auto">
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               {% for category, message in messages %}
@@ -70,6 +71,7 @@
           {% endwith %}
           {% block content %}{% endblock %}
         </div>
+        <div class="col col-lg"></div>
       </div>
     </main>
 
