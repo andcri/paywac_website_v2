@@ -1,12 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
 
-
-<button class="btn btn-info" type="button" onclick="showActive()">
+<div class="row justify-content-md-center">
+<button class="btn btn-secondary" type="button" onclick="showActive()">
         Active</button>
-<button class="btn btn-info" type="button" onclick="showFulfilled()">
+<!-- TODO add span space -->
+<button class="btn btn-secondary" type="button" onclick="showFulfilled()">
         Fulfilled</button>
-<p></p>
+</div>
+
 {% for button in buttons%}
 {% if button.clicked == 0 %}
 <div class="active_button">

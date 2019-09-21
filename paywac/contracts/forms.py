@@ -68,6 +68,7 @@ class ReviewAndDeploy(FlaskForm):
 
 # let seller add the shipping number
 class ShippingNumber(FlaskForm):
+    uuid = StringField('', validators=[DataRequired()])
     tracking_number = StringField('Your Tracking number', validators=[DataRequired()])
     shipper = SelectField('Shipping Company', choices=[('DHL', 'DHL')])
     submit = SubmitField('Add Tracking Number')

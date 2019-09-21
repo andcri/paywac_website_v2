@@ -3,7 +3,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from paywac import db, bcrypt
 from paywac.contracts.forms import CreateContract, ButtonData, DeliverTo, ReviewAndDeploy, ShippingNumber
 from paywac.contracts.utils import gas_to_eth, deploy, secondsToText
-from paywac.models import Contracts_deployed, Deployer, Oracle, User, Contracts_info, Button_data, Shipping_info, Contracts
+from paywac.models import Contracts_deployed, Deployer, Oracle, User, Contracts_info, Button_data, Shipping_info, Contracts, Shipping_tracking
 from uuid import uuid4
 import os
 from crontab import CronTab
@@ -318,16 +318,26 @@ def deploy_contract(uid):
 
 
 # display a list of the contract wich you are the owner of
-@contracts.route("/my_contracts")
+@contracts.route("/my_contracts", methods=['GET', 'POST'])
 @login_required
 def my_contracts():
     rows = Contracts.query.filter_by(owner=current_user.email).all()
-    # TODO if the contract is not in status 0 we will display for each contract a button that contains shipping info
-    # and a form to add the tracking number if the contract is in status 2 (item payed)
     form = ShippingNumber()
     if form.validate_on_submit():
-        # TODO start shipment tracking cronjob
-        pass
+        # add data in the shipping database
+        shipping_tracking = Shipping_tracking(uuid=form.uuid.data, tracking_number=form.tracking_number.data, shipper=form.shipper.data, status='pending',\
+                                                last_location='')
+        # change the status of the tracked variable in the contract table
+        contract = Contracts.query.filter_by(uuid=form.uuid.data).first()
+        contract.tracked = 1
+
+        db.session.add(shipping_tracking)
+        db.session.add(contract)
+        db.session.commit()
+
+        # TODO start cronjob that retrieves data from the shipping
+        
+
     return render_template('my_contracts.html', contracts=rows, form=form)
 
 # display a list of the buttons wich you are the owner of

@@ -7,6 +7,8 @@
       Waiting for Payment</button>
 <button class="btn btn-secondary" type="button" onclick="showToShip()">
     To Ship</button>
+<button class="btn btn-secondary" type="button" onclick="showShipped()">
+    Shipped</button>
 <button class="btn btn-secondary" type="button" onclick="showDelivered()">
     Delivered</button>
 <button class="btn btn-secondary" type="button" onclick="showRefounded()">
@@ -47,8 +49,9 @@
   </article>
 </div>
 <!-- payed to ship -->
-{% elif contract.status == 2%}
-<div class="paied">
+<!--  -->
+{% elif contract.status == 2 and contract.tracked != 1%}
+<div class="paied_to_ship">
   <article class="media content-section">
     <div class="media-body">
       <div class="article-metadata">
@@ -61,6 +64,7 @@
         <form method="POST" action="">
             <fieldset class="form-group">
                 {{ form.csrf_token }}
+                {{ form.uuid(type="hidden", value=contract.uuid) }}
                 <div class="form-inline">
                     {% if form.tracking_number.errors %}
                         {{ form.tracking_number(class="form-control form-control-lg is-invalid") }}
@@ -86,6 +90,21 @@
                 </div>
             </fieldset>
         </form>
+
+    </div>
+  </article>
+</div>
+<!-- shipped -->
+<!-- this will be shown after a tracking number has been added to the contract -->
+{% elif contract.status == 2 and contract.tracked == 1 %}
+<div class="shipped">
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+
+      </div>
+      <h2><a class="article-title" href="#">{{ contract.title }}</a></h2>
+      <p class="article-content">{{ contract.status }}</p> 
 
     </div>
   </article>
@@ -127,6 +146,7 @@ function showToDeploy(){
   var to_deploy = document.getElementsByClassName('to_deploy');
   var waiting_payment = document.getElementsByClassName('waiting_payment');
   var paied_to_ship = document.getElementsByClassName('paied_to_ship');
+  var shipped = document.getElementsByClassName('shipped');
   var delivered = document.getElementsByClassName('delivered');
   var refounded = document.getElementsByClassName('refounded');
 
@@ -142,6 +162,10 @@ function showToDeploy(){
   {
     paied_to_ship[i].style.display="none";
   }
+  for(var i = 0; i < shipped.length; i++)
+  {
+    shipped[i].style.display="none";
+  }
   for(var i = 0; i < delivered.length; i++)
   {
     delivered[i].style.display="none";
@@ -153,11 +177,11 @@ function showToDeploy(){
 
 }
 function showWaitingPayment(){
-  console.log('here')
 
   var to_deploy = document.getElementsByClassName('to_deploy');
   var waiting_payment = document.getElementsByClassName('waiting_payment');
   var paied_to_ship = document.getElementsByClassName('paied_to_ship');
+  var shipped = document.getElementsByClassName('shipped');
   var delivered = document.getElementsByClassName('delivered');
   var refounded = document.getElementsByClassName('refounded');
 
@@ -172,6 +196,10 @@ function showWaitingPayment(){
   for(var i = 0; i < paied_to_ship.length; i++)
   {
     paied_to_ship[i].style.display="none";
+  }
+  for(var i = 0; i < shipped.length; i++)
+  {
+    shipped[i].style.display="none";
   }
   for(var i = 0; i < delivered.length; i++)
   {
@@ -189,6 +217,7 @@ function showToShip(){
   var to_deploy = document.getElementsByClassName('to_deploy');
   var waiting_payment = document.getElementsByClassName('waiting_payment');
   var paied_to_ship = document.getElementsByClassName('paied_to_ship');
+  var shipped = document.getElementsByClassName('shipped');
   var delivered = document.getElementsByClassName('delivered');
   var refounded = document.getElementsByClassName('refounded');
 
@@ -204,6 +233,10 @@ function showToShip(){
   {
     paied_to_ship[i].style.display="block";
   }
+  for(var i = 0; i < shipped.length; i++)
+  {
+    shipped[i].style.display="none";
+  }
   for(var i = 0; i < delivered.length; i++)
   {
     delivered[i].style.display="none";
@@ -213,11 +246,46 @@ function showToShip(){
     refounded[i].style.display="none";
   }
 }
+function showShipped(){
+
+var to_deploy = document.getElementsByClassName('to_deploy');
+var waiting_payment = document.getElementsByClassName('waiting_payment');
+var paied_to_ship = document.getElementsByClassName('paied_to_ship');
+var shipped = document.getElementsByClassName('shipped');
+var delivered = document.getElementsByClassName('delivered');
+var refounded = document.getElementsByClassName('refounded');
+
+for(var i = 0; i < to_deploy.length; i++)
+{
+  to_deploy[i].style.display="none";
+}
+for(var i = 0; i < waiting_payment.length; i++)
+{
+  waiting_payment[i].style.display="none";
+}
+for(var i = 0; i < paied_to_ship.length; i++)
+{
+  paied_to_ship[i].style.display="none";
+}
+for(var i = 0; i < shipped.length; i++)
+{
+  shipped[i].style.display="block";
+}
+for(var i = 0; i < delivered.length; i++)
+{
+  delivered[i].style.display="none";
+}
+for(var i = 0; i < refounded.length; i++)
+{
+  refounded[i].style.display="none";
+}
+}
 function showDelivered(){
 
   var to_deploy = document.getElementsByClassName('to_deploy');
   var waiting_payment = document.getElementsByClassName('waiting_payment');
   var paied_to_ship = document.getElementsByClassName('paied_to_ship');
+  var shipped = document.getElementsByClassName('shipped');
   var delivered = document.getElementsByClassName('delivered');
   var refounded = document.getElementsByClassName('refounded');
 
@@ -232,6 +300,10 @@ function showDelivered(){
   for(var i = 0; i < paied_to_ship.length; i++)
   {
     paied_to_ship[i].style.display="none";
+  }
+  for(var i = 0; i < shipped.length; i++)
+  {
+    shipped[i].style.display="none";
   }
   for(var i = 0; i < delivered.length; i++)
   {
@@ -247,6 +319,7 @@ function showRefounded(){
   var to_deploy = document.getElementsByClassName('to_deploy');
   var waiting_payment = document.getElementsByClassName('waiting_payment');
   var paied_to_ship = document.getElementsByClassName('paied_to_ship');
+  var shipped = document.getElementsByClassName('shipped');
   var delivered = document.getElementsByClassName('delivered');
   var refounded = document.getElementsByClassName('refounded');
 
@@ -261,6 +334,10 @@ function showRefounded(){
   for(var i = 0; i < paied_to_ship.length; i++)
   {
     paied_to_ship[i].style.display="none";
+  }
+  for(var i = 0; i < shipped.length; i++)
+  {
+    shipped[i].style.display="none";
   }
   for(var i = 0; i < delivered.length; i++)
   {

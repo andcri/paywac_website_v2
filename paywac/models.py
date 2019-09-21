@@ -165,6 +165,18 @@ class Contracts(db.Model, UserMixin):
     request_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     # this will be update once the contract will be actually deployed on the network
     deployed_date = db.Column(db.DateTime, nullable=True)
+    tracked = db.Column(db.Integer, nullable=True)
 
     def __repr__():
         return f"Contracts('{self.id}', '{self.uuid}', '{self.title}, '{self.status}')"
+
+class Shipping_tracking(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    uuid = db.Column(db.String(), unique=True)
+    shipper = db.Column(db.String(), nullable=False)
+    tracking_number = db.Column(db.String(), nullable=False)
+    status = db.Column(db.String(), nullable=False)
+    last_location = db.Column(db.String(), nullable=False)
+
+    def __repr__():
+        return f"Shipping_tracking('{self.id}', '{self.uuid}', '{self.status}' , '{self.tracking_number})"
