@@ -1,0 +1,21 @@
+terminated correctly
+Traceback (most recent call last):
+  File "/home/andrea/Desktop/paywac_website_v02/cronjob_scripts/cron_update_info_paywac.py", line 12, in <module>
+    update_contract_info_cron(contract_address)
+  File "/home/andrea/Desktop/paywac_website_v02/cronjob_scripts/update_deployed_contracts_data.py", line 127, in update_contract_info_cron
+    print(str(datetime,now())+' -- terminated correctly')
+NameError: name 'now' is not defined
+2019-09-22 16:15:02.636149 -- terminated correctly
+2019-09-22 16:30:02.855587 -- terminated correctly
+2019-09-22 16:45:02.826070 -- terminated correctly
+2019-09-22 17:00:03.398114 -- terminated correctly
+2019-09-23 09:45:02.300286 -- cannot connect to the chain, skipping this update
+2019-09-23 10:00:02.056776 -- cannot connect to the chain, skipping this update
+2019-09-23 10:15:01.880427 -- cannot connect to the chain, skipping this update
+2019-09-23 10:30:01.836322 -- cannot connect to the chain, skipping this update
+2019-09-23 10:45:01.756786 -- terminated correctly
+2019-09-23 11:00:02.613793 -- terminated correctly
+2019-09-23 11:15:04.046835 -- terminated correctly
+2019-09-23 11:30:02.352696 -- cannot connect to the chain, skipping this update
+2019-09-23 11:45:02.089705 -- cannot connect to the chain, skipping this update
+2019-09-23 12:00:02.288289 -- cannot connect to the chain, skipping this update

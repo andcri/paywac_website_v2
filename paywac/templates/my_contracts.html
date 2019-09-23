@@ -15,7 +15,7 @@
     Refounded</button>
 
 <p></p>
-{% for contract in contracts%}
+{% for contract in _contracts%}
 
 <!-- to deploy -->
 {% if contract.status == 0%}
@@ -25,7 +25,7 @@
       <div class="article-metadata">
 
       </div>
-      <h2><a class="article-title" href="#">{{ contract.title }}</a></h2>
+      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}", address=contract.contract_address)}}">{{ contract.title }}</a></h2>
       <p class="article-content">{{ contract.status }}</p>
 
       <a href='/intent/deploy_contract/{{contract.uuid}}' class="btn btn-primary">Review contract</a>  
@@ -42,7 +42,7 @@
       <div class="article-metadata">
 
       </div>
-      <h2><a class="article-title" href="#">{{ contract.title }}</a></h2>
+      <h2><a class="article-title" href="")}}">{{ contract.title }}</a></h2>
       <p class="article-content">{{ contract.status }}</p> 
 
     </div>
@@ -57,7 +57,7 @@
       <div class="article-metadata">
 
       </div>
-      <h2><a class="article-title" href="#">{{ contract.title }}</a></h2>
+      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}")}}">{{ contract.title }}</a></h2>
       <p class="article-content">{{ contract.status }}</p>
 
       <h5>Add tracking number to this contract</h5>
@@ -103,7 +103,7 @@
       <div class="article-metadata">
 
       </div>
-      <h2><a class="article-title" href="#">{{ contract.title }}</a></h2>
+      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}")}}">{{ contract.title }}</a></h2>
       <p class="article-content">{{ contract.status }}</p> 
 
     </div>
@@ -117,7 +117,7 @@
       <div class="article-metadata">
 
       </div>
-      <h2><a class="article-title" href="#">{{ contract.title }}</a></h2>
+      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}")}}">{{ contract.title }}</a></h2>
       <p class="article-content">{{ contract.status }}</p> 
 
     </div>
@@ -131,7 +131,7 @@
       <div class="article-metadata">
 
       </div>
-      <h2><a class="article-title" href="#">{{ contract.title }}</a></h2>
+      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}")}}">{{ contract.title }}</a></h2>
       <p class="article-content">{{ contract.status }}</p> 
 
     </div>

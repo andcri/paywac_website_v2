@@ -2,6 +2,18 @@
 {% block content %}
 <!-- TODO add a bar that shows the ammout of deployment avaiable and a button to get more deployment -->
 <div class="content-section">
+    <div class="row justify-content-md-center">
+        <div class="col col-lg">
+            {{ credits }} Deployment left.
+        </div>
+        <div class="col col-auto">
+        </div>
+        <div class="col col-lg">
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#addFoundsModal">Add Credits For Deployment</button>
+        </div>
+    </div>
+</div>
+<div class="content-section">
     <form method="POST" action="">
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">Review contract data</legend>
@@ -11,6 +23,8 @@
                         Check Shipping Info
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item">Name: {{ name }}</a>
+                        <a class="dropdown-item">Surname: {{ surname }}</a>
                         <a class="dropdown-item">Street: {{ street }}</a>
                         <a class="dropdown-item">City: {{ city }}</a>
                         <a class="dropdown-item">Country: {{ country }}</a>
@@ -71,7 +85,7 @@
         </div>
 
     </form>
-     <!-- Modal -->
+<!-- Modal -->
   <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -89,6 +103,32 @@
         </div>
         </div>
     </div>
-    </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="addFoundsModal" tabindex="-1" role="dialog" aria-labelledby="addFoundsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addFoundsModalLabel">How to Add more Founds</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                current price for deployment token: 0.0062ETH<br>
+                Send eth to the add_funds function of the contract at address: 
+                from the ethereum that you setted in your account as "Add Founds Address"
+                A video detailing the process is found here : link to video
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 {% endblock content %}

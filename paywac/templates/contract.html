@@ -8,6 +8,9 @@
             </div>
             <div class="col col-auto">
                 Title
+                <p>
+                    {{ title }}
+                </p>
                 <!-- <p>{{ contract_start }}</p>
                 Contract will end
                 <p>{{ contract_end }}</p>
@@ -29,9 +32,21 @@
                 Started
             </div>
             <div class="col col-auto">
-                Ending
+               
             </div>
             <div class="col col-lg">
+                Ending
+            </div>
+        </div>
+        <div class="row justify-content-md-center">
+            <div class="col col-lg">
+               {{ contract_start }}
+            </div>
+            <div class="col col-auto">
+            
+            </div>
+            <div class="col col-lg">
+                {{ contract_end }}
             </div>
         </div>
         <p></p>
@@ -40,12 +55,24 @@
                 Status
             </div>
             <div class="col col-auto">
-                Last Update
+                
             </div>
             <div class="col col-lg">
+                Last Update
             </div>
         </div>
-        <!-- Here i start to check for the status -->
+        <div class="row justify-content-md-center">
+            <div class="col col-lg">
+                {{ status }}
+            </div>
+            <div class="col col-auto">
+                
+            </div>
+            <div class="col col-lg">
+                
+            </div>
+        </div>
+        <!-- Here i start to put info based on the status -->
     </div>
 </article>
 {% endblock content %}

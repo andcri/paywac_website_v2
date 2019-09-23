@@ -1,6 +1,6 @@
 @font-face {
   font-family: myFirstFont;
-  src: url("fonts/Chewy-Regular.ttf");
+  src: url("fonts/MajorMonoDisplay-Regular.ttf");
 }
 
 body {
@@ -92,9 +92,10 @@ a.article-title:hover {
 
 .navbar-brand {
   font-family: myFirstFont;
-  font-size: 28pt;
+  font-size: 22pt;
   transform: translateX(-50%);
   left: 50%;
+  padding-top:0;
   position: absolute;
 }
 

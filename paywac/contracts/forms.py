@@ -49,6 +49,8 @@ class ButtonData(FlaskForm):
 # right now everything will be done manually, later i will put selectors
 class DeliverTo(FlaskForm):
     # street address, country, state, postal code
+    name = StringField('Name', validators=[DataRequired()])
+    surname = StringField('Surname', validators=[DataRequired()])
     street = StringField('Street Address', validators=[DataRequired()])
     city = StringField('City', validators=[DataRequired()])
     country = StringField('Country', validators=[DataRequired()])
