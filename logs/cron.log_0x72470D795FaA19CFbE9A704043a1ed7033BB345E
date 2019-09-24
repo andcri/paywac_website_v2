@@ -19,3 +19,4 @@ NameError: name 'now' is not defined
 2019-09-23 11:30:02.352732 -- cannot connect to the chain, skipping this update
 2019-09-23 11:45:02.078734 -- cannot connect to the chain, skipping this update
 2019-09-23 12:00:02.289353 -- cannot connect to the chain, skipping this update
+2019-09-23 12:15:02.512596 -- terminated correctly

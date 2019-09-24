@@ -85,6 +85,7 @@ class Contracts_info(db.Model, UserMixin):
     paid_ammount = db.Column(db.Float, nullable=False)
     refounded = db.Column(db.Boolean, nullable=False)
     ranking = db.Column(db.Integer, nullable=False)
+    latest_update = db.Column(db.DateTime, nullable=False)
 
     def __repr__():
         return f"Contract_info('{self.id}', '{self.name}', '{self.address}, '{self.active}')"

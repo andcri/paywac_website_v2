@@ -339,7 +339,6 @@ def my_contracts():
         db.session.commit()
 
         # TODO start cronjob that retrieves data from the shipping
-        
 
     return render_template('my_contracts.html', _contracts=rows, form=form)
 

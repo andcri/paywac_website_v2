@@ -55,7 +55,7 @@ class DeliverTo(FlaskForm):
     city = StringField('City', validators=[DataRequired()])
     country = StringField('Country', validators=[DataRequired()])
     state = StringField('State', validators=[DataRequired()])
-    postal_code = IntegerField('postal code', validators=[DataRequired()])
+    postal_code = StringField('postal code', validators=[DataRequired()])
     email = StringField('Write here your email to get Notifications (optional)', validators=[Optional(), Email()])
     confirm = BooleanField('I confirm the purchase of the item', validators=[DataRequired()])
     # TODO add chapta here

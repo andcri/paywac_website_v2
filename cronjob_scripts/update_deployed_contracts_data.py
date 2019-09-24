@@ -44,6 +44,7 @@ def update_contract_info_cron(contract_addr):
             paid_ammount = Column(Float)
             refounded = Column(Boolean)
             ranking = Column(Integer)
+            latest_update = Column(Integer)
 
         # create database session
         # TODO make it read from an external json
@@ -80,6 +81,7 @@ def update_contract_info_cron(contract_addr):
         # convert the paid ammount from wei to eth
         paid_ammount = float(Web3.fromWei(Contract.functions.payed_ammount().call(), 'ether'))
         refounded = Contract.functions.refounded().call()
+        latest_update = datetime.now()
 
         # check for the status of variables refounded, time_item_delivered
         # and change the status of the contract in the contract deployed_table
@@ -92,6 +94,8 @@ def update_contract_info_cron(contract_addr):
             #remove the cronjob
             command_to_delete = f'/home/andrea/anaconda3/envs/vyper/bin/python /home/andrea/Desktop/paywac_website_v02/cronjob_scripts/cron_update_info_paywac.py {contract_addr} >> /home/andrea/Desktop/paywac_website_v02/logs/cron.log_{contract_addr} 2>&1'
             os.system(f"crontab -u andrea -l | grep -v '{command_to_delete}'  | crontab -u andrea -")
+            print(str(datetime.now())+' -- Contract not respected, eth refounded')
+
         elif time_item_delivered_unix != 0 and has_buyer_paid == True:
 
             current_contract.status = 3
@@ -99,6 +103,7 @@ def update_contract_info_cron(contract_addr):
             #remove the cronjob
             command_to_delete = f'/home/andrea/anaconda3/envs/vyper/bin/python /home/andrea/Desktop/paywac_website_v02/cronjob_scripts/cron_update_info_paywac.py {contract_addr} >> /home/andrea/Desktop/paywac_website_v02/logs/cron.log_{contract_addr} 2>&1'
             os.system(f"crontab -u andrea -l | grep -v '{command_to_delete}'  | crontab -u andrea -")
+            print(str(datetime.now())+' -- Contract fulfilled, money sent to the seller')
 
         elif time_item_delivered_unix == 0 and has_buyer_paid == True:
             current_contract.status = 2
@@ -115,10 +120,11 @@ def update_contract_info_cron(contract_addr):
             row.has_buyer_paid = has_buyer_paid
             row.paid_ammount = paid_ammount
             row.refounded = refounded
+            row.latest_update = latest_update
             session.commit()
         except:
             row = Contracts_info(contract_address=contract_addr, contract_start=contract_start, contract_end=contract_end, time_item_delivered=time_item_delivered,\
-                                    has_buyer_paid=has_buyer_paid, paid_ammount=paid_ammount, refounded=refounded, ranking=0)
+                                    has_buyer_paid=has_buyer_paid, paid_ammount=paid_ammount, refounded=refounded, ranking=0, latest_update=latest_update)
             session.add(row)
             session.commit()
         
