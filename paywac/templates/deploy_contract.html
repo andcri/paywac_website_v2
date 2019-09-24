@@ -2,14 +2,17 @@
 {% block content %}
 <!-- TODO add a bar that shows the ammout of deployment avaiable and a button to get more deployment -->
 <div class="content-section">
-    <div class="row justify-content-md-center">
-        <div class="col col-lg">
-            {{ credits }} Deployment left.
-        </div>
-        <div class="col col-auto">
-        </div>
-        <div class="col col-lg">
-            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#addFoundsModal">Add Credits For Deployment</button>
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col col-lg">
+                You have {{ credits }} Deployment token.
+            </div>
+            <div class="col col-lg-2">
+                
+            </div>
+            <div class="col col-lg">
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#addFoundsModal">Add Contract Tokens</button>
+            </div>
         </div>
     </div>
 </div>
@@ -19,8 +22,8 @@
             <legend class="border-bottom mb-4">Review contract data</legend>
             <div class="form-inline">
                 <div class="dropdown">
-                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Check Shipping Info
+                    <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         Shipping Info
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item">Name: {{ name }}</a>
@@ -32,10 +35,10 @@
                         <a class="dropdown-item">Postal Code: {{ postal_code }}</a>
                     </div>
                 </div>
-                <!-- add span with blank space --> ==
+                <pre class="tab">                          </pre>
                 <div class="dropdown">
-                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Check Contract Info
+                    <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         Contract Info
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         {% if insertion_link != ''%}
@@ -80,8 +83,9 @@
             </div>
         </fieldset>
         <div class="form-inline">
-            {{ form.submit(class="btn btn-outline-info") }}
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Reject this contract</button>
+            <pre class="tab">                   </pre>
+            {{ form.submit(class="btn btn-primary") }}
         </div>
 
     </form>
@@ -116,10 +120,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                current price for deployment token: 0.0062ETH<br>
-                Send eth to the add_funds function of the contract at address: 
-                from the ethereum that you setted in your account as "Add Founds Address"
-                A video detailing the process is found here : link to video
+                current price for deployment token: 0.00508ETH<br>
+                Send eth to the add_funds function of the contract at address:<br>
+                If this is the first time that you are doing this,<br>
+                You can check out the written documentation and a video<br>
+                on how to do it at this link: link to resource
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

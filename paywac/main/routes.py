@@ -15,6 +15,11 @@ def about():
     return render_template('about.html', title='About')
 
 
+@main.route("/add_founds")
+def add_founds():
+    return render_template('add_founds_description.html', title='Add Founds')
+
+# TODO to delete once we are not in dev
 @main.route('/create_db')
 def create_db():
     db.create_all()

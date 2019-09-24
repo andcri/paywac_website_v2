@@ -2,8 +2,8 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint,
 from flask_login import login_user, current_user, logout_user, login_required
 from paywac import db, bcrypt
 from paywac.contracts.forms import CreateContract, ButtonData, DeliverTo, ReviewAndDeploy, ShippingNumber
-from paywac.contracts.utils import gas_to_eth, deploy, secondsToText
-from paywac.models import Contracts_deployed, Deployer, Oracle, User, Contracts_info, Button_data, Shipping_info, Contracts, Shipping_tracking
+from paywac.contracts.utils import gwei_to_eth, deploy, secondsToText
+from paywac.models import Deployer, Oracle, User, Contracts_info, Button_data, Shipping_info, Contracts, Shipping_tracking, Gas_price
 from uuid import uuid4
 import os
 from crontab import CronTab
@@ -97,8 +97,6 @@ contracts = Blueprint('contracts', __name__)
     # result = gas_to_eth(695333, 9)
     # return render_template('create_contract.html', form=form)
 
-
-# TODO modify with the new implementation
 @contracts.route('/contract/<string:address>')
 def contract(address):
     """
@@ -246,15 +244,31 @@ def deploy_contract(uid):
     deployer = Deployer.query.filter(Deployer.active==1).first().address
     user_wac = User.query.filter_by(email=current_user.email).first()
 
+
+
     if current_user.email == contract_owner and contract_status == 0:
+
+        # TODO calculate contract deployment price based on the avg gas price and the contract price inside the gas table
+        # display based on that calculation and the ammount of eth that the user has in his account under wac_credits
+
+        # get gas price and contract cost info
+        table_gas_price = Gas_price.query.filter_by(id=1).first()
+        gas_price = table_gas_price.standard_gas_price
+        contract_cost = table_gas_price.contract_cost
+
+        # get the ammount of eth that the user have avaiable
+        user_avaiable_eth = user_wac.wac_credits
+
+        #calculate the cost of the deployment with the current price
+        eth_needed = gwei_to_eth(gas_price * contract_cost)
 
         # form that require the user to accept and let the user submit and doing so the contract will be deployed
         form = ReviewAndDeploy()
         form.seller_address.data = contract.seller_address
 
-        if form.validate_on_submit() and user_wac.wac_credits > 0:
+        if form.validate_on_submit() and eth_needed >= user_wac.wac_credits:
             # reduce by one the deployment count for the user
-            user_wac.wac_credits -= 1
+            user_wac.wac_credits -= eth_needed
             db.session.add(user_wac)
 
             # deploy contract on ethereum and collect response info(contract address ecc)
@@ -289,14 +303,15 @@ def deploy_contract(uid):
                 # create cronjob for that reads the data inside the contract and insert it into the database
                 try:
                     cron = CronTab(user='andrea')
-                    job = cron.new(command=f'/home/andrea/anaconda3/envs/vyper/bin/python /home/andrea/Desktop/paywac_website_v02/cronjob_scripts/cron_update_info_paywac.py {contract_address} >> /home/andrea/Desktop/paywac_website_v02/logs/cron.log_{contract_addr} 2>&1')
+                    job = cron.new(command=f'/home/andrea/anaconda3/envs/vyper/bin/python /home/andrea/Desktop/paywac_website_v02/cronjob_scripts/cron_update_info_paywac.py {contract_address} >> /home/andrea/Desktop/paywac_website_v02/logs/cron.log_{contract_address} 2>&1')
                     job.minute.every(15)
 
                     cron.write()
                 except:
                     print("error creating the cronjob for the newly deployed contract")
 
-                flash('Contract Deployed successfully', 'success')
+                flash(f'Contract Deployed successfully at address {contract_address}', 'success')
+                flash('It may take up to 15 minutes to be able to see the contract in the website', 'success')
 
                 # TODO send email notification to the buyer
                 return redirect(url_for('main.home'))

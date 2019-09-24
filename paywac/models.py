@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
-    wac_credits = db.Column(db.Integer, default=0)
+    wac_credits = db.Column(db.Float, default=0)
     receiving_address = db.Column(db.String(), default='')
     recharge_address = db.Column(db.String(), unique=True, nullable=True)
     
@@ -36,32 +36,32 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
         
-class Contracts_deployed(db.Model, UserMixin):
-    # pk for the table
-    id = db.Column(db.Integer, primary_key=True)
-    # uuid for the request
-    request_id = db.Column(db.String(), unique=True, nullable=False)
-    # paywac user that created the contract
-    contract_creator_user = db.Column(db.String(), nullable=False)
-    # address of the deployed contract
-    contract_address = db.Column(db.String(), nullable=False)
-    # name of the contract used (default paywac)
-    contract_name = db.Column(db.String(), nullable=False)
-    # variables used to create the contract
-    deployer = db.Column(db.String(), nullable=False)
-    seller = db.Column(db.String(), nullable=False)
-    buyer = db.Column(db.String(), nullable=False)
-    oracle = db.Column(db.String(), nullable=False)
-    contract_time = db.Column(db.Integer, nullable=False)
-    contract_delivery_eta = db.Column(db.Integer, nullable=False)
-    item_price = db.Column(db.Float, nullable=False)
-    # status of the request(contract is online = 1, contract request created but contract is not online = 0)
-    status = db.Column(db.Integer, nullable=False)
-    # email to notify the other party
-    email = db.Column(db.String(200), nullable=True)
+# class Contracts_deployed(db.Model, UserMixin):
+#     # pk for the table
+#     id = db.Column(db.Integer, primary_key=True)
+#     # uuid for the request
+#     request_id = db.Column(db.String(), unique=True, nullable=False)
+#     # paywac user that created the contract
+#     contract_creator_user = db.Column(db.String(), nullable=False)
+#     # address of the deployed contract
+#     contract_address = db.Column(db.String(), nullable=False)
+#     # name of the contract used (default paywac)
+#     contract_name = db.Column(db.String(), nullable=False)
+#     # variables used to create the contract
+#     deployer = db.Column(db.String(), nullable=False)
+#     seller = db.Column(db.String(), nullable=False)
+#     buyer = db.Column(db.String(), nullable=False)
+#     oracle = db.Column(db.String(), nullable=False)
+#     contract_time = db.Column(db.Integer, nullable=False)
+#     contract_delivery_eta = db.Column(db.Integer, nullable=False)
+#     item_price = db.Column(db.Float, nullable=False)
+#     # status of the request(contract is online = 1, contract request created but contract is not online = 0)
+#     status = db.Column(db.Integer, nullable=False)
+#     # email to notify the other party
+#     email = db.Column(db.String(200), nullable=True)
 
-    def __repr__():
-        return f"Payment_promess('{self.id}', '{self.request_id}')"
+#     def __repr__():
+#         return f"Payment_promess('{self.id}', '{self.request_id}')"
 
 # this contains all the contracts info that the user can deploy from the website for now it will contain just the info about the paywac contract
 class Contracts_types(db.Model, UserMixin):
@@ -183,3 +183,19 @@ class Shipping_tracking(db.Model, UserMixin):
 
     def __repr__():
         return f"Shipping_tracking('{self.id}', '{self.uuid}', '{self.status}' , '{self.tracking_number})"
+
+class Add_founds(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    last_blockHeight = db.Column(db.Integer(), unique=True)
+
+    def __repr__():
+        return f"Add_founds('{self.id}', '{self.last_blockHeight}')"
+
+# record the standard gas price updated every minute
+class Gas_price(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    standard_gas_price = db.Column(db.Float)
+    contract_cost = db.Column(db.Integer)
+
+    def __repr__():
+        return f"Gas_price('{self.id}', '{self.standard_gas_price}')"

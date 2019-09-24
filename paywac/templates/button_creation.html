@@ -94,12 +94,12 @@
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.shipping_price(class="form-control form-control-lg") }}
+                    {{ form.shipping_price(class="form-control form-control-lg ") }}
                 {% endif %}
             </div>
         </fieldset>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info") }}
+        <div class="form-group text-right">
+            {{ form.submit(class="btn btn-primary ") }}
         </div>
     </form>
 </div>

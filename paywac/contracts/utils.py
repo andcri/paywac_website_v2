@@ -3,20 +3,26 @@ from decimal import Decimal
 import os
 import json
 
-def gas_to_eth(gas_ammount, gas_price=10):
-    """
-    given an ammount of gas and the price that i want to pay default=10Gwei
-    it shows the price of eth that i need to send in order to deploy the contract
-    """
-    w3 = Web3(IPCProvider('/home/andrea/.ethereum/rinkeby/geth.ipc'))
+# def gas_to_eth(gas_ammount, gas_price=10):
+#     """
+#     given an ammount of gas and the price that i want to pay default=10Gwei
+#     it shows the price of eth that i need to send in order to deploy the contract
+#     """
+#     w3 = Web3(IPCProvider('/home/andrea/.ethereum/rinkeby/geth.ipc'))
 
-    gas_price_wei = w3.toWei(gas_price, 'gwei')
+#     gas_price_wei = w3.toWei(gas_price, 'gwei')
 
-    wei_ammount = gas_ammount * gas_price_wei
+#     wei_ammount = gas_ammount * gas_price_wei
 
-    eth_amount = w3.fromWei(wei_ammount, 'ether')
+#     eth_amount = w3.fromWei(wei_ammount, 'ether')
 
+#     return eth_amount
+
+def gwei_to_eth(ammount):
+    wei_amount = Decimal(ammount) * (Decimal(10) ** 9)
+    eth_amount = web3.fromWei(wei_amount,'ether')
     return eth_amount
+
 
 # deploy the contract to the rinkeby network
 def deploy(deployer, seller, oracle, contract_time, contract_shipping_eta, item_price, shipping_price):
@@ -75,8 +81,8 @@ def secondsToText(secs):
     hours = (secs - days*86400)//3600
     minutes = (secs - days*86400 - hours*3600)//60
     seconds = secs - days*86400 - hours*3600 - minutes*60
-    result = ("{} days, ".format(days) if days else "") + \
-    ("{} hours, ".format(hours) if hours else "") + \
-    ("{} minutes, ".format(minutes) if minutes else "") + \
-    ("{} seconds, ".format(seconds) if seconds else "")
+    result = ("{} days ".format(days) if days else "") + \
+    ("{} hours ".format(hours) if hours else "") + \
+    ("{} minutes ".format(minutes) if minutes else "") + \
+    ("{} seconds ".format(seconds) if seconds else "")
     return result

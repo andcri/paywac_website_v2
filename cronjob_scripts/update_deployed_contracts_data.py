@@ -129,5 +129,7 @@ def update_contract_info_cron(contract_addr):
             session.commit()
         
         print(str(datetime.now())+' -- terminated correctly')
+        session.close()
     except:
         print(str(datetime.now())+' -- cannot connect to the chain, skipping this update')
+        session.close()

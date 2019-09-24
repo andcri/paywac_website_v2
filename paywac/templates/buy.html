@@ -2,8 +2,8 @@
 {% block content %}
 <div class="content-section">
 <div class="dropdown">
-    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Check Item info
+    <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Item info
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         {% if insertion_link != ''%}
@@ -140,8 +140,8 @@
                 {% endif %}
             </div>
         </fieldset>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info") }}
+        <div class="form-group text-right">
+            {{ form.submit(class="btn btn-primary") }}
         </div>
     </form>
 </div>

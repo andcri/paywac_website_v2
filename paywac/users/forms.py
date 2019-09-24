@@ -36,10 +36,9 @@ class LoginForm(FlaskForm):
 
 # TODO add add_founds_default_address, and recieving_default_address (find better names)
 class UpdateAccountForm(FlaskForm):
-    username = StringField('Username',
-                           validators=[DataRequired(), Length(min=2, max=20)])
-    email = StringField('Email',
-                        validators=[DataRequired(), Email()])
+    add_founds = StringField('Add Contract Tokens Address', validators=[DataRequired(), Length(min=40, max=42)])
+    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Update')
 

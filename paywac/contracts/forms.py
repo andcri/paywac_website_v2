@@ -11,7 +11,7 @@ class CreateContract(FlaskForm):
     # address of the buyer
     buyer = StringField('The Ethereum address that will send the money to make the purchease', validators=[DataRequired(), Length(min=40, max=42)])
     # the time that the contract stay online without recieving any payment
-    contract_time = SelectField('The ammount of days that the contract will stay online in accept payment status', choices=[('86400', '1 day'), ('172800', '2 days'), ('259200', '3 days'), ('345600', '4 days'), ('432000', '5 days'), ('518400', '6 days'), ('604800', '1 week')])
+    contract_time = SelectField('The ammount of days that the contract will stay online in accept payment status', choices=[('86400', '1 day'), ('172800', '2 days'), ('259200', '3 days'), ('345600', '4 days'), ('432000', '5 days'), ('518400', '6 days'), ('604800', '1 week')], default='259200')
     # the eta of the shipping after the package has been payed
     shipping_eta = SelectField('The eta of the shipping after the package has been payed', choices=[('86400', '1 day'), ('172800', '2 days'), ('259200', '3 days'), ('345600', '4 days'), ('432000', '5 days'), ('518400', '6 days'), ('604800', '1 week'), ('864000', '10 days'), ('1209600', '2 weeks')])
     # the price of the item
@@ -34,9 +34,9 @@ class ButtonData(FlaskForm):
     # ethereum address where to recieve the money
     seller_address = StringField('The Ethereum address where you want to be payed', validators=[DataRequired(), Length(min=40, max=42)])
     # contract time
-    contract_time = SelectField('The ammount of days that the contract will stay online in accept payment status', choices=[('86400', '1 day'), ('172800', '2 days'), ('259200', '3 days'), ('345600', '4 days'), ('432000', '5 days'), ('518400', '6 days'), ('604800', '1 week')])
+    contract_time = SelectField('The ammount of days that the contract will stay online in accept payment status', choices=[('86400', '1 day'), ('172800', '2 days'), ('259200', '3 days'), ('345600', '4 days'), ('432000', '5 days'), ('518400', '6 days'), ('604800', '1 week')], default='259200')
     # shipping time
-    shipping_eta = SelectField('The eta of the shipping after the package has been payed', choices=[('86400', '1 day'), ('172800', '2 days'), ('259200', '3 days'), ('345600', '4 days'), ('432000', '5 days'), ('518400', '6 days'), ('604800', '1 week'), ('864000', '10 days'), ('1209600', '2 weeks')])
+    shipping_eta = SelectField('The eta of the shipping after the package has been payed', choices=[('86400', '1 day'), ('172800', '2 days'), ('259200', '3 days'), ('345600', '4 days'), ('432000', '5 days'), ('518400', '6 days'), ('604800', '1 week'), ('864000', '10 days'), ('1209600', '2 weeks')], default='432000')
     # TODO decide if to set the price directly in eth or to let the user set 
     # it in dollars, euros, like the wearecrypto website, for now we require in eth
     # the price of the item
