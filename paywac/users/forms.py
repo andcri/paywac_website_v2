@@ -36,7 +36,7 @@ class LoginForm(FlaskForm):
 
 # TODO add add_founds_default_address, and recieving_default_address (find better names)
 class UpdateAccountForm(FlaskForm):
-    add_founds = StringField('Add Contract Tokens Address', validators=[DataRequired(), Length(min=40, max=42)])
+    add_founds = StringField('Add Ethereum to Deployer Address', validators=[DataRequired(), Length(min=40, max=42)])
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])

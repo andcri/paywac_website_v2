@@ -4,26 +4,28 @@
 <div class="row justify-content-md-center">
 <button class="btn btn-secondary" type="button" onclick="showActive()">
         Active</button>
-<!-- TODO add span space -->
+        <pre class="tab"> </pre>
+        <p></p>
 <button class="btn btn-secondary" type="button" onclick="showFulfilled()">
         Fulfilled</button>
 </div>
-
+<p></p>
 {% for button in buttons%}
 {% if button.clicked == 0 %}
 <div class="active_button">
     <article class="media content-section">
             <div class="media-body">
-            <div class="article-metadata">
-
-            </div>
-            <h2><a class="article-title" href="#">{{ button.title }}</a></h2>
-            <p class="article-content">{{ button.clicked }}</p>
-            
+            <h2><span class="article-title">{{ button.title }}</span></h2>
             <div>
                 <textarea style="opacity: 0" readonly id="generated_code_{{button.title}}">{{ button.button_code }}</textarea>
             </div>
-            <button onclick='myFunction("{{button.title}}")'>Copy text</button>
+            <div class="row">
+                <div class="col col-md-3"></div>
+                <div class="col col-md-3"></div>
+                <div class="col col-md-auto">
+                    <button class="btn btn-primary" onclick='myFunction("{{button.title}}")'>Copy text</button>
+                </div>
+            </div>
             </div>
 
     </article>
@@ -32,16 +34,17 @@
 <div class="fulfilled_button">
         <article class="media content-section">
                 <div class="media-body">
-                <div class="article-metadata">
-    
-                </div>
-                <h2><a class="article-title" href="#">{{ button.title }}</a></h2>
-                <p class="article-content">{{ button.clicked }}</p>
-                
+                <h2><span class="article-title">{{ button.title }}</span></h2>
                 <div>
                     <textarea style="opacity: 0" readonly id="generated_code_{{button.title}}">{{ button.button_code }}</textarea>
                 </div>
-                <button onclick='myFunction("{{button.title}}")'>Copy text</button>
+                <div class="row">
+                    <div class="col col-md-3"></div>
+                    <div class="col col-md-3"></div>
+                    <div class="col col-md-auto">
+                        <button class="btn btn-primary" onclick='myFunction("{{button.title}}")'>Copy text</button>
+                    </div>
+                </div>
                 </div>
     
         </article>

@@ -11,92 +11,6 @@ from datetime import datetime
 
 contracts = Blueprint('contracts', __name__)
 
-# OLD
-# @contracts.route('/intent/new_contract', methods=['GET', 'POST'])
-# @login_required
-# def new_contract():
-    # """
-    # Create and deploy the contract to the network, create a cronjob to update the contract status
-    # """
-    # # TODO autofill fields if a request comes with args
-    # # reuqire data insertion from the user inserting all the info to create and deploy a new contract
-    # form = CreateContract()
-    # # retrieve active oracle and deployer
-    # oracle = Oracle.query.filter(Oracle.active==1).first().address
-    # deployer = Deployer.query.filter(Deployer.active==1).first().address
-    # # generate a unique request_id
-    # request_id = str(uuid4())
-    # # validate data
-    # if form.validate_on_submit():
-    #     # check if user has enough founds to deploy a contract to determine the status variable value of the Table
-    #     status = 1 if current_user.wac_credits > 0 else 0
-
-    #     # TODO check if the email field was empty, if not send a notification of the operation at the end of the deployment
-        
-    #     # if the status is 0 create the entry in the database withoud deploying the contract
-    #     if status == 0:
-    #         # save the data in the database
-    #         # row = Contracts_deployed(request_id=request_id, contract_creator_user=current_user.email, contract_address='', contract_name=form.name.data,\
-    #         #                             deployer=deployer, seller=form.seller.data, buyer=form.buyer.data, oracle=oracle, contract_time=form.contract_time.data,\
-    #         #                                 contract_delivery_eta=form.shipping_eta.data, item_price=form.item_price.data, status=status, email=form.email.data)
-
-    #         # db.session.add(row)
-    #         # db.session.commit()
-    #         flash('Not enough founds to deploy the contract, please add founds create and deploy a contract', 'danger')
-    #         return redirect(url_for('main.home'))
-    #     # the user has enough founds to deploy the contract
-    #     else:
-    #         # decrese by one the credit of the user        
-    #         user_wac = User.query.filter_by(email=current_user.email).first()
-    #         user_wac.wac_credits -= 1
-    #         db.session.add(user_wac)
-
-    #         try:
-    #             # deploy the contract
-    #             tx_receipt = deploy(deployer, form.seller.data, form.buyer.data, oracle, int(form.contract_time.data), int(form.shipping_eta.data), form.item_price.data)
-    #             # the contract address will be retrieved from the receipt
-    #             contract_address = tx_receipt.get('contractAddress')
-    #             # get the transaction status, 1 if the transaction succede, 0 if not, if we have a 0
-    #             # an error will be reported
-    #             transaction_status = tx_receipt.get('status')
-    #             # get the block where the transaction is inside
-    #             block_number = tx_receipt.get('blockNumber')
-    #             # the gas used for the transaction
-    #             gas_used = tx_receipt.get('gasUsed')
-    #             # enter data in the table
-    #             row = Contracts_deployed(request_id=request_id, contract_creator_user=current_user.email, contract_address=contract_address, contract_name=form.name.data,\
-    #                                     deployer=deployer, seller=form.seller.data, buyer=form.buyer.data, oracle=oracle, contract_time=form.contract_time.data,\
-    #                                         contract_delivery_eta=form.shipping_eta.data, item_price=form.item_price.data, status=status, email=form.email.data)
-    #             # redirect user to the contract page
-    #             db.session.add(row)
-    #             db.session.commit()
-
-    #             # start the script that listen to the contract notifications as a backgroud process
-    #             # PATH_TO_SUBSCRIBER_PAYWAC this will be in a json file
-    #             # PATH_TO_SUBSCRIBER_PAYWAC = '/home/andrea/Desktop/paywac_website/cronjob_scripts/paywac_subscriber.py'
-    #             # os.system(f"nohup {PATH_TO_SUBSCRIBER_PAYWAC} {contract_address} &")
-    #             # TODO create a cronjob that execute every 30 minutes the script cron_update_info_paywac.py
-    #             # sample_cronjob_creator.py mimics the code that will be written here
-    #             cron = CronTab(user='andrea')
-    #             job = cron.new(command=f'/home/andrea/anaconda3/envs/vyper/bin/python /home/andrea/Desktop/paywac_website/cronjob_scripts/cron_update_info_paywac.py {contract_address} > /home/andrea/Desktop/paywac_website/logs/cron.log 2>&1')
-    #             job.minute.every(15)
-
-    #             cron.write()
-
-    #             flash('Contract Deployed, here you can see the status and real time updates', 'success')
-    #             return redirect(url_for('main.home'))
-    #         except:
-    #             print('error in deploying the contract')
-    #             # TODO notify via email to me that something went wrong
-    #             # put the status of the contract pending approvation
-    #             # flash the message to the user that the contract will be deployed in 1 hour max
-    
-    # # LOGIC: if not save the data in the database and set the flag that is not deployed, redirect to the account page
-    # # of the user and notify that he has to recharge his founds then he can go to the page of the contract and
-    # # click the deploy button w/o having to reinput all the data
-    # result = gas_to_eth(695333, 9)
-    # return render_template('create_contract.html', form=form)
-
 @contracts.route('/contract/<string:address>')
 def contract(address):
     """
@@ -251,24 +165,24 @@ def deploy_contract(uid):
         # TODO calculate contract deployment price based on the avg gas price and the contract price inside the gas table
         # display based on that calculation and the ammount of eth that the user has in his account under wac_credits
 
-        # get gas price and contract cost info
         table_gas_price = Gas_price.query.filter_by(id=1).first()
         gas_price = table_gas_price.standard_gas_price
         contract_cost = table_gas_price.contract_cost
 
-        # get the ammount of eth that the user have avaiable
-        user_avaiable_eth = user_wac.wac_credits
 
-        #calculate the cost of the deployment with the current price
-        eth_needed = gwei_to_eth(gas_price * contract_cost)
+        user_avaiable_eth = user_wac.wac_credits
+        eth_needed_for_deployment = gwei_to_eth(gas_price * contract_cost)
+
+        # TODO understand in witch format the eth has being saved from the add_founds cron and then convert it to eth if is not already
+        deployments_avaiables = gwei_to_eth(user_avaiable_eth) / eth_needed_for_deployment
 
         # form that require the user to accept and let the user submit and doing so the contract will be deployed
         form = ReviewAndDeploy()
         form.seller_address.data = contract.seller_address
 
-        if form.validate_on_submit() and eth_needed >= user_wac.wac_credits:
+        if form.validate_on_submit() and eth_needed_for_deployment >= user_wac.wac_credits:
             # reduce by one the deployment count for the user
-            user_wac.wac_credits -= eth_needed
+            user_wac.wac_credits -= eth_needed_for_deployment
             db.session.add(user_wac)
 
             # deploy contract on ethereum and collect response info(contract address ecc)
@@ -318,14 +232,14 @@ def deploy_contract(uid):
             except:
                 flash("Error Deploying the contract","danger")
 
-        elif form.validate_on_submit() and user_wac.wac_credits == 0:
+        elif form.validate_on_submit() and eth_needed_for_deployment < user_wac.wac_credits:
             flash('You dont have enough founds to deploy a contract','warning')
             # TODO add instructions to add tokens for contract deployment
         
         return render_template('deploy_contract.html', form=form, uuid=uid, insertion_link=contract.name, insertion_title=contract.title, seller_address=contract.seller_address,\
                                 contract_time=secondsToText(contract.contract_time), shipping_eta=secondsToText(contract.shipping_eta), item_price=contract.item_price, shipping_price=contract.shipping_price,\
                                     city=shipping_info.city, street=shipping_info.street, country=shipping_info.country, state=shipping_info.state, postal_code=shipping_info.postal_code,\
-                                        name=shipping_info.buyer_name, surname=shipping_info.buyer_surname, credits=user_wac.wac_credits)
+                                        name=shipping_info.buyer_name, surname=shipping_info.buyer_surname, deployments_avaiables=round(deployments_avaiables))
     elif current_user.email == contract_owner and contract_status != 0:
         flash("This contract has already been deployed")
         return redirect(url_for('main.home'))

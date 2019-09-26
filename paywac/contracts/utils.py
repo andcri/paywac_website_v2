@@ -3,24 +3,9 @@ from decimal import Decimal
 import os
 import json
 
-# def gas_to_eth(gas_ammount, gas_price=10):
-#     """
-#     given an ammount of gas and the price that i want to pay default=10Gwei
-#     it shows the price of eth that i need to send in order to deploy the contract
-#     """
-#     w3 = Web3(IPCProvider('/home/andrea/.ethereum/rinkeby/geth.ipc'))
-
-#     gas_price_wei = w3.toWei(gas_price, 'gwei')
-
-#     wei_ammount = gas_ammount * gas_price_wei
-
-#     eth_amount = w3.fromWei(wei_ammount, 'ether')
-
-#     return eth_amount
-
 def gwei_to_eth(ammount):
     wei_amount = Decimal(ammount) * (Decimal(10) ** 9)
-    eth_amount = web3.fromWei(wei_amount,'ether')
+    eth_amount = Web3.fromWei(wei_amount,'ether')
     return eth_amount
 
 
