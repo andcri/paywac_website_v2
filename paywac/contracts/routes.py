@@ -62,29 +62,24 @@ def create_button():
     # the uuid will be the id that we will search in the table to retrieve all the data needed later
     if form.validate_on_submit():
 
-        if form.name.data:
-            button_html = f"""
-            <a class="button" href="http://127.0.0.1:5000/intent/buy?uid={uuid}" data-size="large">
-            <img src="../static/website_img/twitter.png" alt="" style="width:59px; height:24px;">
-            </a>
-            """
 
-        else:
-            button_html = f"""
-                <a class="button" href="http://127.0.0.1:5000/intent/buy?uid={uuid}" data-size="large">
-                <img src="../static/website_img/twitter.png" alt="" style="width:59px; height:24px;">
-                </a>
-            """
+        link =f"http://127.0.0.1:5000/intent/buy?uid={uuid}"
 
-            # insert button data in the database
+        button_html = f"""
+        <a class="button" href="http://127.0.0.1:5000/intent/buy?uid={uuid}" data-size="large">
+        <img src="../static/website_img/twitter.png" alt="" style="width:59px; height:24px;">
+        </a>
+        """
+
+        # insert button data in the database
         row = Button_data(uuid=uuid, creator_mail=current_user.email, name=form.name.data, title=form.title.data, seller_address=form.seller_address.data, contract_time=form.contract_time.data,\
                             shipping_eta=form.shipping_eta.data, item_price=form.item_price.data, shipping_price=form.shipping_price.data, clicked=0,\
-                            button_code=button_html)
+                            button_code=button_html, link=link)
 
         db.session.add(row)
         db.session.commit()
 
-        return render_template('button_creation.html',display_form=False, form=form, generated_code=button_html)
+        return render_template('button_creation.html',display_form=False, form=form, generated_code=button_html, link=link)
 
     # LATER STEPS: when a request will be made we check for every value to match the insertion in the database, if
     # there will be a match we get the uuid and we create the request for the seller

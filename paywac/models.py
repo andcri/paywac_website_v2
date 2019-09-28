@@ -99,7 +99,7 @@ class Button_data(db.Model, UserMixin):
     shipping_price = db.Column(db.Float, nullable=False)
     clicked = db.Column(db.Integer, nullable=False)
     button_code = db.Column(db.String(), nullable=False)
-
+    link = db.Column(db.String(), nullable=False)
 
     def __repr__():
         return f"Button_data('{self.id}', '{self.uuid}', '{self.title}, '{self.seller_address}')"
