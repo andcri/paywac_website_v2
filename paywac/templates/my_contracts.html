@@ -13,7 +13,6 @@
     Delivered</button>
 <button class="btn btn-secondary" type="button" onclick="showRefounded()">
     Refounded</button>
-
 <p></p>
 {% for contract in _contracts%}
 
@@ -39,6 +38,9 @@
       <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}")}}">{{ contract.title }}</a></h2>
       <p class="article-content">Contract is waiting for payment</p> 
     </div>
+    {% if (contract.deployed_date + contract.contract_time | from_seconds_to_time) < datetime_now %}
+      <p>Expired</p>
+    {% endif %}
   </article>
 </div>
 <!-- payed to ship -->

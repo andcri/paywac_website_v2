@@ -3,13 +3,16 @@ from decimal import Decimal
 import os
 import json
 
-def gwei_to_eth(ammount):
-    wei_amount = Decimal(ammount) * (Decimal(10) ** 9)
+def gwei_to_eth(amount):
+    wei_amount = Decimal(amount) * (Decimal(10) ** 9)
     eth_amount = Web3.fromWei(wei_amount,'ether')
     return eth_amount
 
+def wei_to_eth(amount):
+    eth_amount = Web3.fromWei(amount,'ether')
+    return eth_amount
 
-# deploy the contract to the rinkeby network
+# TODO the deploy method must also retrieve the actual gas price from the table once its building the transaction
 def deploy(deployer, seller, oracle, contract_time, contract_shipping_eta, item_price, shipping_price):
 
     deployer = Web3.toChecksumAddress(deployer)

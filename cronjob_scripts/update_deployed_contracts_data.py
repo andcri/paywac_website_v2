@@ -25,6 +25,8 @@ def update_contract_info_cron(contract_addr):
             owner = Column(String)
             contract_address = Column(String)
             seller_address = Column(String)
+            oracle_address = Column(Integer)
+            deployer_address = Column(Integer)
             contract_time = Column(Integer)
             shipping_eta = Column(Integer)
             item_price = Column(Float)
@@ -49,7 +51,6 @@ def update_contract_info_cron(contract_addr):
         # create database session
         # TODO make it read from an external json
         uri = 'postgres+psycopg2://postgres:MyPassword@localhost:5432/paywac'
-
         engine = create_engine(uri)
         Session = sessionmaker(bind=engine)
         session = Session()
@@ -61,16 +62,10 @@ def update_contract_info_cron(contract_addr):
             data = json.load(json_file)
 
         address = contract_addr
-
         abi = data['abi']
-
         bytecode = data['bytecode']
-
-        # establish connection with testnet
         w3 = Web3(IPCProvider('/home/andrea/.ethereum/rinkeby/geth.ipc'))
-
         w3.middleware_stack.inject(geth_poa_middleware, layer=0)
-
         Contract = w3.eth.contract(address=address, abi=abi)
 
         contract_start = datetime.fromtimestamp(Contract.functions.contractStart().call())
@@ -83,10 +78,8 @@ def update_contract_info_cron(contract_addr):
         refounded = Contract.functions.refounded().call()
         latest_update = datetime.now()
 
-        # check for the status of variables refounded, time_item_delivered
-        # and change the status of the contract in the contract deployed_table
-
-        #TODO maybe send a notification when the contract is modified to one of this two status
+        #TODO send a notification when the contract is modified to one of this two status
+        # Here i have all the condition to check that will update the status of the contract
         if refounded == True or refounded == 'true' or refounded == 'True':
 
             current_contract.status = 4
@@ -109,6 +102,13 @@ def update_contract_info_cron(contract_addr):
             current_contract.status = 2
             session.commit()
             # TODO here we could send a notification to the seller when the buyer has payed the item
+
+        # check if the datetimenow is grater than the contract end date, and if the item has not beeing payed yet
+        elif contract_end < datetime.now() and current_contract.status == 1:
+            command_to_delete = f'/home/andrea/anaconda3/envs/vyper/bin/python /home/andrea/Desktop/paywac_website_v02/cronjob_scripts/cron_update_info_paywac.py {contract_addr} >> /home/andrea/Desktop/paywac_website_v02/logs/cron.log_{contract_addr} 2>&1'
+            os.system(f"crontab -u andrea -l | grep -v '{command_to_delete}'  | crontab -u andrea -")
+            print(str(datetime.now())+' -- Contract not rispected,no money was sent to the seller')
+
 
 
         # build transaction and commit changes to the database

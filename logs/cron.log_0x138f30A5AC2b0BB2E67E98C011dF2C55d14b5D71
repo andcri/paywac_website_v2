@@ -62,3 +62,36 @@ NameError: name 'now' is not defined
 2019-09-24 16:15:01.958559 -- terminated correctly
 2019-09-24 16:30:02.060220 -- terminated correctly
 2019-09-24 16:45:01.993535 -- terminated correctly
+2019-09-26 14:15:02.366229 -- terminated correctly
+2019-09-27 10:15:02.438486 -- terminated correctly
+2019-09-27 10:30:02.163679 -- terminated correctly
+2019-09-27 10:45:01.884020 -- terminated correctly
+2019-09-27 11:00:01.946704 -- terminated correctly
+2019-09-27 11:15:02.150295 -- terminated correctly
+2019-09-27 11:30:02.182941 -- terminated correctly
+2019-09-27 11:45:01.927338 -- cannot connect to the chain, skipping this update
+2019-09-27 12:00:01.594219 -- cannot connect to the chain, skipping this update
+2019-09-27 12:15:02.251043 -- cannot connect to the chain, skipping this update
+2019-09-27 12:30:01.919988 -- cannot connect to the chain, skipping this update
+2019-09-27 12:45:01.550448 -- cannot connect to the chain, skipping this update
+2019-09-27 13:00:02.217757 -- cannot connect to the chain, skipping this update
+2019-09-27 13:15:01.895119 -- cannot connect to the chain, skipping this update
+2019-09-27 13:30:02.584380 -- cannot connect to the chain, skipping this update
+2019-09-27 13:45:02.052235 -- cannot connect to the chain, skipping this update
+2019-09-27 14:00:01.808736 -- cannot connect to the chain, skipping this update
+2019-09-27 14:15:02.594750 -- cannot connect to the chain, skipping this update
+2019-09-27 14:30:02.176931 -- cannot connect to the chain, skipping this update
+2019-09-27 14:45:01.807857 -- cannot connect to the chain, skipping this update
+2019-09-27 15:00:02.524352 -- terminated correctly
+2019-09-27 15:15:02.555787 -- terminated correctly
+2019-09-27 15:30:02.644104 -- terminated correctly
+2019-09-27 15:45:02.504052 -- terminated correctly
+2019-09-27 16:00:02.636358 -- terminated correctly
+2019-09-27 16:15:02.397091 -- terminated correctly
+2019-09-27 18:45:02.726436 -- terminated correctly
+2019-09-27 19:00:02.501306 -- terminated correctly
+2019-09-27 19:15:02.433349 -- terminated correctly
+2019-09-27 19:30:01.944944 -- cannot connect to the chain, skipping this update
+2019-09-27 19:45:03.231888 -- cannot connect to the chain, skipping this update
+2019-09-27 20:00:02.026320 -- cannot connect to the chain, skipping this update
+2019-09-28 10:30:02.256458 -- cannot connect to the chain, skipping this update

@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-<article class="media content-section" style="background-image: url('../static/images/background.jpg');">
+<article class="media content-section" style="background-image: url('../static/images/background1.jpg');">
     <div class="media-body">
         <div class="row justify-content-md-center">
             <div class="col col-lg">
@@ -22,11 +22,13 @@
                 <p>{{ refounded }}</p>
                 <p>{{ ranking }}</p> -->
                 <p></p>
-                Address
+                Address<br>
+                {{ contract_address }}
             </div>
             <div class="col col-lg">
             </div>
         </div>
+        <p></p>
         <div class="row justify-content-md-center">
             <div class="col col-lg">
                 Started
@@ -69,7 +71,7 @@
                 
             </div>
             <div class="col col-lg">
-                
+                {{ latest_update }}
             </div>
         </div>
         <!-- Here i start to put info based on the status -->

@@ -135,6 +135,8 @@ class Contracts(db.Model, UserMixin):
     # here will be setted the contract address, the string will be empty and will be update to the real value once the contract will be deployed
     contract_address = db.Column(db.String(), nullable=False, default='')
     seller_address = db.Column(db.String(), nullable=False)
+    oracle_address = db.Column(db.Integer, nullable=False)
+    deployer_address = db.Column(db.Integer, nullable=False)
     contract_time = db.Column(db.Integer, nullable=False)
     shipping_eta = db.Column(db.Integer, nullable=False)
     item_price = db.Column(db.Float, nullable=False)

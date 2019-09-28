@@ -11,3 +11,30 @@
 2019-09-24 16:15:01.955198 -- terminated correctly
 2019-09-24 16:30:01.942775 -- terminated correctly
 2019-09-24 16:45:01.996691 -- terminated correctly
+2019-09-26 14:15:02.363013 -- terminated correctly
+2019-09-27 10:15:02.408292 -- terminated correctly
+2019-09-27 10:30:02.197338 -- terminated correctly
+2019-09-27 10:45:01.887193 -- terminated correctly
+2019-09-27 11:00:01.943748 -- terminated correctly
+2019-09-27 11:15:02.146704 -- terminated correctly
+2019-09-27 11:30:02.159854 -- terminated correctly
+2019-09-27 11:45:01.931568 -- cannot connect to the chain, skipping this update
+2019-09-27 12:00:01.600947 -- cannot connect to the chain, skipping this update
+2019-09-27 12:15:02.257548 -- cannot connect to the chain, skipping this update
+2019-09-27 12:30:01.920202 -- cannot connect to the chain, skipping this update
+2019-09-27 12:45:01.559697 -- cannot connect to the chain, skipping this update
+2019-09-27 13:00:02.217606 -- cannot connect to the chain, skipping this update
+2019-09-27 13:15:01.898313 -- cannot connect to the chain, skipping this update
+2019-09-27 13:30:02.571744 -- cannot connect to the chain, skipping this update
+2019-09-27 13:45:02.047728 -- cannot connect to the chain, skipping this update
+2019-09-27 14:00:01.868833 -- cannot connect to the chain, skipping this update
+2019-09-27 14:15:02.594750 -- cannot connect to the chain, skipping this update
+2019-09-27 14:30:02.173327 -- cannot connect to the chain, skipping this update
+2019-09-27 14:45:01.805473 -- cannot connect to the chain, skipping this update
+2019-09-27 15:00:02.555357 -- terminated correctly
+2019-09-27 15:15:02.505964 -- terminated correctly
+2019-09-27 15:30:02.641417 -- terminated correctly
+2019-09-27 15:45:02.491854 -- terminated correctly
+2019-09-27 16:00:02.637499 -- terminated correctly
+2019-09-27 16:15:02.323594 -- Contract not rispected,no money was sent to the seller
+2019-09-27 16:15:02.329714 -- terminated correctly

@@ -2,12 +2,12 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint,
 from flask_login import login_user, current_user, logout_user, login_required
 from paywac import db, bcrypt
 from paywac.contracts.forms import CreateContract, ButtonData, DeliverTo, ReviewAndDeploy, ShippingNumber
-from paywac.contracts.utils import gwei_to_eth, deploy, secondsToText
+from paywac.contracts.utils import gwei_to_eth, deploy, secondsToText, wei_to_eth
 from paywac.models import Deployer, Oracle, User, Contracts_info, Button_data, Shipping_info, Contracts, Shipping_tracking, Gas_price
 from uuid import uuid4
 import os
 from crontab import CronTab
-from datetime import datetime
+from datetime import datetime, timedelta
 
 contracts = Blueprint('contracts', __name__)
 
@@ -19,8 +19,9 @@ def contract(address):
     """
     # data from the contracts deployed
     row = Contracts.query.filter_by(contract_address=address).first()
-    # extract the data from the database
+
     uid = row.uuid
+    contract_address = row.contract_address
     contract_title = row.title
     seller = row.seller_address
     price = row.item_price
@@ -29,14 +30,17 @@ def contract(address):
 
     # data from the contracts info
     row_info = Contracts_info.query.filter_by(contract_address=address).first()
+
     contract_start = row_info.contract_start
     contract_end = row_info.contract_end
     time_item_delivered = row_info.time_item_delivered
     has_buyer_paid = row_info.has_buyer_paid
     ranking = row_info.ranking
+    latest_update = row_info.latest_update
 
     return render_template('contract.html', contract_start=contract_start, contract_end=contract_end, time_item_delivered=time_item_delivered,\
-                            has_buyer_paid=has_buyer_paid, ranking=ranking, status=status, title=contract_title)
+                            has_buyer_paid=has_buyer_paid, ranking=ranking, status=status, title=contract_title, contract_address=contract_address,\
+                                latest_update=latest_update)
 
 
 # generate the html code for a button that will be embedded to a third party website to create a request for a new contract
@@ -88,10 +92,11 @@ def create_button():
 
     return render_template('button_creation.html', display_form=True, form=form)
 
-
-# page where the buyer is redirected when he press the button
 @contracts.route('/intent/buy', methods=['GET', 'POST'])
 def buy():
+    """
+    collect data from buyer and create Shipping_info row and Contract row
+    """
     uid = request.args.get('uid')
     # check if the uuid passed exists and check if the clicked field is set to False, if both this requirements are sadisfied we
     # and we can proceed to ask the user for the info that we need
@@ -102,24 +107,26 @@ def buy():
         creator_mail = row.creator_mail
         contract_time_formatted = secondsToText(row.contract_time)
         shipping_eta_formatted = secondsToText(row.shipping_eta)
+        oracle_address = Oracle.query.filter(Oracle.active==1).first().id
+        deployer_address = Deployer.query.filter(Deployer.active==1).first().id
         # form with the info that the user has to input(shipping address)
         form = DeliverTo()
         # confirmation, and creation of buy_request that the seller will review and accept(or that accepts automaticaly if setted to do so)
-        if form.validate_on_submit():
+        if form.validate_on_submit() and row.clicked == 0:
             # add the shipping info binded to the uid to the database
             shipping_row = Shipping_info(uuid=uid, seller_email=creator_mail, buyer_email=form.email.data, street=form.street.data,\
                                             city=form.city.data, country=form.country.data, state=form.state.data, postal_code=form.postal_code.data,\
                                                 buyer_name=form.name.data, buyer_surname=form.surname.data)
             # create new contract in pending seller approval status
             contract_row = Contracts(uuid=uid, name=row.name, title=row.title, owner=creator_mail, seller_address=row.seller_address,\
-                                        contract_time=row.contract_time, shipping_eta=row.shipping_eta, item_price=row.item_price,\
-                                            shipping_price=row.shipping_price, status=0)
+                                        oracle_address = oracle_address, deployer_address=deployer_address, contract_time=row.contract_time,\
+                                            shipping_eta=row.shipping_eta, item_price=row.item_price, shipping_price=row.shipping_price, status=0)
 
             db.session.add(shipping_row)
             db.session.add(contract_row)
             db.session.commit()
-            # buyer will recieve a email when the contract is actually deployed, this will redirect him to the contract page where he will be
-            # able to see the contract address and provide the payment
+            
+            # TODO send email here to buyer with info
             flash('Your request has been submitted successfully, please wait on your email for a notification with the payment info', 'success')
             # TODO send email notification to the seller
             return redirect(url_for('main.home'))
@@ -170,26 +177,29 @@ def deploy_contract(uid):
         contract_cost = table_gas_price.contract_cost
 
 
-        user_avaiable_eth = user_wac.wac_credits
+        user_avaiable_eth = wei_to_eth(user_wac.wac_credits)
         eth_needed_for_deployment = gwei_to_eth(gas_price * contract_cost)
 
         # TODO understand in witch format the eth has being saved from the add_founds cron and then convert it to eth if is not already
-        deployments_avaiables = gwei_to_eth(user_avaiable_eth) / eth_needed_for_deployment
+        deployments_avaiables = user_avaiable_eth / eth_needed_for_deployment
 
         # form that require the user to accept and let the user submit and doing so the contract will be deployed
         form = ReviewAndDeploy()
         form.seller_address.data = contract.seller_address
 
         if form.validate_on_submit() and eth_needed_for_deployment >= user_wac.wac_credits:
-            # reduce by one the deployment count for the user
-            user_wac.wac_credits -= eth_needed_for_deployment
-            db.session.add(user_wac)
 
             # deploy contract on ethereum and collect response info(contract address ecc)
             try:
-            
-                tx_receipt = deploy(deployer, form.seller_address.data, oracle, contract_time, contract_shipping_eta, contract_item_price, contract_shipping_price)
                 
+                # TODO the deploy method must also retrieve the actual gas price from the table once its building the transaction,
+                #      this value will also be returned and it will be the actual value that will be removed from the user balance
+                tx_receipt, eth_to_remove_from_user = deploy(deployer, form.seller_address.data, oracle, contract_time, contract_shipping_eta, contract_item_price,\
+                                    contract_shipping_price)
+                
+                user_wac.wac_credits -= eth_to_remove_from_user
+                db.session.add(user_wac)
+
                 contract_address = tx_receipt.get('contractAddress')
                 # get the transaction status, 1 if the transaction succede, 0 if not, if we have a 0
                 # an error will be reported
@@ -254,6 +264,7 @@ def deploy_contract(uid):
 def my_contracts():
     rows = Contracts.query.filter_by(owner=current_user.email).order_by(Contracts.request_created.desc()).all()
     form = ShippingNumber()
+    datetime_now = datetime.now()
     if form.validate_on_submit():
         
         # add data in the shipping database
@@ -269,7 +280,7 @@ def my_contracts():
 
         # TODO start cronjob that retrieves data from the shipping
 
-    return render_template('my_contracts.html', _contracts=rows, form=form)
+    return render_template('my_contracts.html', _contracts=rows, form=form, datetime_now=datetime_now)
 
 # display a list of the buttons wich you are the owner of
 @contracts.route("/my_buttons")

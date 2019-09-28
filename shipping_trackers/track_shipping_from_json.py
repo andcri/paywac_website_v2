@@ -58,6 +58,7 @@ shipping_info = session.query(Shipping_info).filter_by(uuid=shipping_tracking.uu
 
 # TODO (with the real thing)call the dhl api and check for an answer, if an answer is not being received yet dont do anything and wait for next cronjob iteration
 # use quit() if this condition is sadisfied
+# sample of the not found can be seen here: https://developer.dhl/api-reference/shipment-tracking#/default/get_shipments
 
 # check if the status is pending in the shipping_tracking table, if yes:
 

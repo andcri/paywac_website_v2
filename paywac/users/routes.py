@@ -1,10 +1,12 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from paywac import db, bcrypt
-from paywac.models import User
+from paywac.models import User, Gas_price
 from paywac.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
                                    RequestResetForm, ResetPasswordForm)
 from paywac.users.utils import save_picture, send_reset_email
+from paywac.contracts.utils import wei_to_eth, gwei_to_eth
+from math import floor
 
 users = Blueprint('users', __name__)
 
@@ -59,10 +61,20 @@ def account():
         return redirect(url_for('users.account'))
     elif request.method == 'GET':
         form.add_founds.data = current_user.recharge_address
+
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+
     add_founds_address = current_user.recharge_address
+    table_gas_price = Gas_price.query.filter_by(id=1).first()
+    gas_price = table_gas_price.standard_gas_price
+    contract_cost = table_gas_price.contract_cost
+    user_avaiable_eth = wei_to_eth(current_user.wac_credits)
+    eth_needed_for_deployment = gwei_to_eth(gas_price * contract_cost)
+    deployments_avaiables = user_avaiable_eth / eth_needed_for_deployment
+
     return render_template('account.html', title='Account',
-                           image_file=image_file, form=form, add_founds=add_founds_address)
+                           image_file=image_file, form=form, add_founds=add_founds_address, user_avaiable_eth=user_avaiable_eth,\
+                                deployments_avaiables=floor(deployments_avaiables))
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])

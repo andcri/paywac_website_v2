@@ -1,0 +1,53 @@
+Traceback (most recent call last):
+  File "/home/andrea/Desktop/paywac_website_v02/cronjob_scripts/add_founds_cron_events.py", line 41, in <module>
+    with open('../paywac/static/contracts_code/build/add_founds.json') as json_file:
+FileNotFoundError: [Errno 2] No such file or directory: '../paywac/static/contracts_code/build/add_founds.json'
+AttributeDict({'args': AttributeDict({'_from': '0x213E348f0b0d431d751e71a21d644e4Ad0f03238', '_to': '0xb773c20A88C56f4458ae6ddB3e542AC60e4b9f8F', '_value': 18773991000000000}), 'event': 'event_add_founds', 'logIndex': 1, 'transactionIndex': 1, 'transactionHash': HexBytes('0xc7d7c5ec9df394d50341411d6a68c3c50b3004ae33e1c4aee93df1e32b4898bb'), 'address': '0xFd7bA9c21397B564B7b7277fA930e57eA4A1B449', 'blockHash': HexBytes('0x506a5df60a6599ff174e8dd61cfcf00ad2b658346a7fa1d9b16474d5dd6bcc38'), 'blockNumber': 5164007})
+added to database
+nothing to update
+AttributeDict({'args': AttributeDict({'_from': '0x213E348f0b0d431d751e71a21d644e4Ad0f03238', '_to': '0xb773c20A88C56f4458ae6ddB3e542AC60e4b9f8F', '_value': 18773991000000000}), 'event': 'event_add_founds', 'logIndex': 0, 'transactionIndex': 0, 'transactionHash': HexBytes('0x99839904f6b0c911a5b168dd9969fd5ced0a6e2262b6795218be80ec4477dde6'), 'address': '0xFd7bA9c21397B564B7b7277fA930e57eA4A1B449', 'blockHash': HexBytes('0x1db914ad62ca4019e62dfbbd43d176b0ce133b5bcf4bf6f26895cb2dfa1333ce'), 'blockNumber': 5164091})
+added to database
+nothing to update
+Traceback (most recent call last):
+  File "/home/andrea/Desktop/paywac_website_v02/cronjob_scripts/add_founds_cron_events.py", line 46, in <module>
+    event_filter = Contract.events.event_add_founds.createFilter(fromBlock=add_founds.last_blockHeight)
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/utils/decorators.py", line 16, in _wrapper
+    return self.method(objtype, *args, **kwargs)
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/contract.py", line 1327, in createFilter
+    log_filter = self.web3.eth.filter(event_filter_params)
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/eth.py", line 332, in filter
+    [filter_params],
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/manager.py", line 109, in request_blocking
+    response = self._make_request(method, params)
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/manager.py", line 92, in _make_request
+    return request_func(method, params)
+  File "cytoolz/functoolz.pyx", line 250, in cytoolz.functoolz.curry.__call__
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/middleware/formatting.py", line 48, in apply_formatters
+    response = make_request(method, formatted_params)
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/middleware/gas_price_strategy.py", line 18, in middleware
+    return make_request(method, params)
+  File "cytoolz/functoolz.pyx", line 250, in cytoolz.functoolz.curry.__call__
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/middleware/formatting.py", line 48, in apply_formatters
+    response = make_request(method, formatted_params)
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/middleware/attrdict.py", line 18, in middleware
+    response = make_request(method, params)
+  File "cytoolz/functoolz.pyx", line 250, in cytoolz.functoolz.curry.__call__
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/middleware/formatting.py", line 48, in apply_formatters
+    response = make_request(method, formatted_params)
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/middleware/normalize_errors.py", line 9, in middleware
+    result = make_request(method, params)
+  File "cytoolz/functoolz.pyx", line 250, in cytoolz.functoolz.curry.__call__
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/middleware/formatting.py", line 50, in apply_formatters
+    response = make_request(method, params)
+  File "cytoolz/functoolz.pyx", line 250, in cytoolz.functoolz.curry.__call__
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/middleware/formatting.py", line 48, in apply_formatters
+    response = make_request(method, formatted_params)
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/providers/ipc.py", line 206, in make_request
+    with self._lock, self._socket as sock:
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/providers/ipc.py", line 46, in __enter__
+    self.sock = self._open()
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/providers/ipc.py", line 59, in _open
+    return get_ipc_socket(self.ipc_path)
+  File "/home/andrea/anaconda3/envs/vyper/lib/python3.6/site-packages/web3/providers/ipc.py", line 30, in get_ipc_socket
+    sock.connect(ipc_path)
+FileNotFoundError: [Errno 2] No such file or directory

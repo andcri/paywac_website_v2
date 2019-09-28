@@ -11,8 +11,6 @@ import time
 import json
 import requests
 
-# database connection
-
 Base = declarative_base()
 
 class Gas_price(Base):
@@ -26,22 +24,21 @@ uri = 'postgres+psycopg2://postgres:MyPassword@localhost:5432/paywac'
 engine = create_engine(uri)
 Session = sessionmaker(bind=engine)
 session = Session()
+
 try:
     URL = "https://ethgasstation.info/json/ethgasAPI.json"
 
     request = requests.get(url=URL)
-
     data = request.json()
-
     avg_price = data['average']/10
+    
 except:
-    print('error retrieving data')
+    print(str(datetime.now())+' -- error retrieving data')
     # TODO log and send email
-
-# save price in the database
 
 gas_price = session.query(Gas_price).filter_by(id=1).first()
 gas_price.standard_gas_price = avg_price
 session.add(gas_price)
 session.commit()
 session.close()
+print(str(datetime.now())+' -- price updated')
