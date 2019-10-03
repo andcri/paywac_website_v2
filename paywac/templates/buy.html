@@ -15,6 +15,7 @@
         <a class="dropdown-item" href="#">Shipping Time(start after you make the payment): {{ shipping_eta }}</a>
         <a class="dropdown-item" href="#">Item Price: {{ item_price }}</a>
         <a class="dropdown-item" href="#">Shipping Price: {{ shipping_price }}</a>
+        <a class="dropdown-item" href="#">Currency: {{ currency }}</a>
         <a class="dropdown-item" href="#">Total Price To Pay: {{ shipping_price + item_price}}</a>
     </div>
 </div>
@@ -113,6 +114,24 @@
                     {{ form.postal_code(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
+            <!-- check the type of currency that the user will use to make the payment -->
+            <!-- if he uses eth than we dont need the info of the buyer address -->
+            <!-- if he uses theter than we need to ask for this info -->
+            {% if currency == "USDT" %}
+            <div class="form-group">
+                {{ form.buyer_address.label(class="form-control-label") }}
+                {% if form.buyer_address.errors %}
+                    {{ form.buyer_address(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.buyer_address.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.buyer_address(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            {% endif %}
             <div class="form-group">
                 {{ form.email.label(class="form-control-label") }}
                 {% if form.email.errors %}

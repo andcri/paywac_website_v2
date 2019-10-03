@@ -1,18 +1,28 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<button class="btn btn-secondary" type="button" onclick="showToDeploy()">
-    To Deploy</button>
-  <button class="btn btn-secondary" type="button" onclick="showWaitingPayment()">
-      Waiting for Payment</button>
-<button class="btn btn-secondary" type="button" onclick="showToShip()">
-    To Ship</button>
-<button class="btn btn-secondary" type="button" onclick="showShipped()">
-    Shipped</button>
-<button class="btn btn-secondary" type="button" onclick="showDelivered()">
-    Delivered</button>
-<button class="btn btn-secondary" type="button" onclick="showRefounded()">
-    Refounded</button>
+<div class="row justify-content-md-center">
+    <div class="col col-lg">
+        
+    </div>
+    <div class="col col-auto">
+        <button class="btn btn-secondary" type="button" onclick="showToDeploy()">
+            To Deploy</button>
+        <button class="btn btn-secondary" type="button" onclick="showWaitingPayment()">
+            Waiting for Payment</button>
+        <button class="btn btn-secondary" type="button" onclick="showToShip()">
+            To Ship</button>
+        <button class="btn btn-secondary" type="button" onclick="showShipped()">
+            Shipped</button>
+        <button class="btn btn-secondary" type="button" onclick="showDelivered()">
+            Delivered</button>
+        <button class="btn btn-secondary" type="button" onclick="showRefounded()">
+            Refounded</button>
+    </div>
+    <div class="col col-lg">
+        
+    </div>
+</div>
 <p></p>
 {% for contract in _contracts%}
 
@@ -21,7 +31,7 @@
 <div class="to_deploy">
   <article class="media content-section">
     <div class="media-body">
-      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}", address=contract.contract_address)}}">{{ contract.title }}</a></h2>
+      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}", address=contract.contract_address)}}">{{ contract.title[:30] }}</a></h2>
       <p class="article-content">Contract to be Deployed</p> 
       <div class="text-right">
         <a href='/intent/deploy_contract/{{contract.uuid}}' class="btn btn-primary">Review and Deploy the contract</a>  
@@ -35,22 +45,42 @@
 <div class="waiting_payment">
   <article class="media content-section">
     <div class="media-body">
-      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}")}}">{{ contract.title }}</a></h2>
+      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}")}}">{{ contract.title[:30] }}</a></h2>
       <p class="article-content">Contract is waiting for payment</p> 
     </div>
     {% if (contract.deployed_date + contract.contract_time | from_seconds_to_time) < datetime_now %}
-      <p>Expired</p>
+      <span class= "text-danger"> Expired </span>
+      <!-- TODO add option here to reset the button to be able to create a new contract with a new customer -->
     {% endif %}
   </article>
 </div>
 <!-- payed to ship -->
-<!--  -->
+<!-- TODO add button that once clicked displays the shipping info -->
 {% elif contract.status == 2 and contract.tracked != 1%}
 <div class="paied_to_ship">
   <article class="media content-section">
     <div class="media-body">
-      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}")}}">{{ contract.title }}</a></h2>
+      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}")}}">{{ contract.title[:30] }}</a></h2>
       <p class="article-content">Contract paied, please ship the item and add the tracking number</p>
+
+      {% for shipping in shipping_info_row %}
+        {% if shipping.uuid == contract.uuid %}
+        <div class="dropdown">
+            <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Shipping Info
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item">Name: {{ shipping.buyer_name }}</a>
+                <a class="dropdown-item">Surname: {{ shipping.buyer_surname }}</a>
+                <a class="dropdown-item">Street: {{ shipping.street }}</a>
+                <a class="dropdown-item">City: {{ shipping.city }}</a>
+                <a class="dropdown-item">Country: {{ shipping.country }}</a>
+                <a class="dropdown-item">State: {{ shipping.state }}</a>
+                <a class="dropdown-item">Postal Code: {{ shipping.postal_code }}</a>
+            </div>
+        </div>
+        {% endif %}
+      {% endfor %}
 
       <h5>Add a tracking number to this contract</h5>
         <form method="POST" action="">
@@ -92,7 +122,7 @@
 <div class="shipped">
   <article class="media content-section">
     <div class="media-body">
-      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}")}}">{{ contract.title }}</a></h2>
+      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}")}}">{{ contract.title[:30] }}</a></h2>
       <p class="article-content">The item is shipped with tracking number: </p> 
 
     </div>
@@ -103,7 +133,7 @@
 <div class="delivered">
   <article class="media content-section">
     <div class="media-body">
-      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}")}}">{{ contract.title }}</a></h2>
+      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}")}}">{{ contract.title[:30] }}</a></h2>
       <p class="article-content">The item has been succesfully delivered</p> 
 
     </div>
@@ -114,7 +144,7 @@
 <div class="refounded">
   <article class="media content-section">
     <div class="media-body">
-      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}")}}">{{ contract.title }}</a></h2>
+      <h2><a class="article-title" href="{{url_for("contracts.contract", address=contract.contract_address)}}")}}">{{ contract.title[:30] }}</a></h2>
       <p class="article-content">The item was not delivered to the buyer or the item recieved was not accepted by the buyer</p> 
 
     </div>

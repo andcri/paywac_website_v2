@@ -10,3 +10,181 @@ added to database
 nothing to update
 2019-09-28 10:40:02.545694 -- cannot connect to the chain, skipping this update
 2019-09-28 10:50:01.786009 -- cannot connect to the chain, skipping this update
+2019-09-28 11:00:02.628111 -- cannot connect to the chain, skipping this update
+2019-09-28 11:10:02.398843 -- cannot connect to the chain, skipping this update
+2019-09-28 11:20:01.953308 -- cannot connect to the chain, skipping this update
+2019-09-28 11:30:02.702047 -- cannot connect to the chain, skipping this update
+2019-09-28 11:40:01.969410 -- cannot connect to the chain, skipping this update
+2019-09-28 11:50:01.552884 -- cannot connect to the chain, skipping this update
+2019-09-28 12:00:02.690912 -- cannot connect to the chain, skipping this update
+2019-09-28 12:10:02.006108 -- nothing to update
+2019-09-28 12:20:02.466330 -- nothing to update
+2019-09-28 12:30:02.412082 -- nothing to update
+2019-09-28 12:40:02.102235 -- nothing to update
+2019-09-28 12:50:02.461032 -- nothing to update
+2019-09-28 13:00:05.383876 -- nothing to update
+2019-09-28 13:10:04.926705 -- nothing to update
+2019-09-28 13:20:02.248605 -- nothing to update
+2019-09-28 13:30:04.391675 -- nothing to update
+2019-09-28 13:40:02.619441 -- nothing to update
+2019-09-28 13:50:03.652400 -- nothing to update
+2019-09-28 14:00:03.886943 -- nothing to update
+2019-09-28 16:20:01.935418 -- cannot connect to the chain, skipping this update
+2019-09-28 16:30:02.210454 -- cannot connect to the chain, skipping this update
+2019-09-28 16:40:04.015507 -- nothing to update
+2019-09-28 16:50:02.801032 -- nothing to update
+2019-09-28 17:00:02.616295 -- nothing to update
+2019-09-28 17:10:02.900439 -- nothing to update
+2019-09-28 17:20:01.681086 -- nothing to update
+2019-09-28 17:30:02.613964 -- nothing to update
+2019-09-28 17:40:01.717507 -- nothing to update
+2019-09-28 17:50:02.445335 -- nothing to update
+2019-09-28 18:00:02.922261 -- nothing to update
+2019-09-28 18:10:02.413333 -- nothing to update
+AttributeDict({'args': AttributeDict({'_from': '0x213E348f0b0d431d751e71a21d644e4Ad0f03238', '_to': '0xb773c20A88C56f4458ae6ddB3e542AC60e4b9f8F', '_value': 18773991000000000}), 'event': 'event_add_founds', 'logIndex': 10, 'transactionIndex': 2, 'transactionHash': HexBytes('0xc1f78c47f0e283b96989b90f59b69599acabff606bc4660218f427bd2dc0f4a5'), 'address': '0xFd7bA9c21397B564B7b7277fA930e57eA4A1B449', 'blockHash': HexBytes('0x886a49b864996b4ec9579efa31e0948b0e73375022400bb90d3e39b896274a2a'), 'blockNumber': 5169659})
+2019-09-28 18:20:01.704443 -- added to database
+2019-09-28 18:30:02.490210 -- nothing to update
+2019-09-28 18:40:02.542801 -- nothing to update
+2019-09-29 10:50:02.798384 -- cannot connect to the chain, skipping this update
+2019-09-29 11:00:03.281124 -- cannot connect to the chain, skipping this update
+2019-09-29 11:10:02.464293 -- cannot connect to the chain, skipping this update
+2019-09-29 11:20:02.513838 -- cannot connect to the chain, skipping this update
+2019-09-29 11:30:02.942599 -- cannot connect to the chain, skipping this update
+2019-09-29 11:40:01.638156 -- cannot connect to the chain, skipping this update
+2019-09-29 11:50:01.597277 -- cannot connect to the chain, skipping this update
+2019-09-29 12:00:03.266506 -- cannot connect to the chain, skipping this update
+2019-09-29 12:10:02.562767 -- nothing to update
+2019-09-29 12:20:02.492580 -- cannot connect to the chain, skipping this update
+2019-09-29 12:30:02.680235 -- cannot connect to the chain, skipping this update
+2019-09-29 12:40:01.842673 -- cannot connect to the chain, skipping this update
+2019-09-29 12:50:02.114100 -- cannot connect to the chain, skipping this update
+2019-09-29 13:00:02.412391 -- cannot connect to the chain, skipping this update
+2019-09-29 13:10:02.537212 -- cannot connect to the chain, skipping this update
+2019-09-29 13:20:02.402216 -- cannot connect to the chain, skipping this update
+2019-09-29 13:30:02.966207 -- cannot connect to the chain, skipping this update
+2019-09-29 13:40:01.663786 -- cannot connect to the chain, skipping this update
+2019-09-29 13:50:02.418356 -- nothing to update
+2019-09-29 14:00:03.404964 -- nothing to update
+2019-09-29 16:20:36.380330 -- nothing to update
+2019-09-29 16:30:02.822045 -- nothing to update
+2019-09-29 16:40:01.951350 -- nothing to update
+2019-09-29 16:50:02.443962 -- nothing to update
+2019-09-29 17:00:03.267465 -- nothing to update
+2019-09-29 17:10:02.492383 -- nothing to update
+2019-09-29 17:20:01.839573 -- nothing to update
+2019-09-29 17:30:03.471844 -- nothing to update
+2019-09-29 17:40:01.975214 -- nothing to update
+2019-09-29 17:50:02.730285 -- nothing to update
+2019-09-29 18:00:02.890042 -- nothing to update
+2019-09-29 18:10:04.762875 -- nothing to update
+2019-09-29 18:20:01.951607 -- cannot connect to the chain, skipping this update
+2019-09-29 18:30:02.370014 -- cannot connect to the chain, skipping this update
+2019-09-29 18:40:01.583387 -- cannot connect to the chain, skipping this update
+2019-09-29 18:50:01.967953 -- cannot connect to the chain, skipping this update
+2019-09-29 19:00:02.823958 -- cannot connect to the chain, skipping this update
+2019-09-29 19:10:02.179631 -- cannot connect to the chain, skipping this update
+2019-09-29 19:20:02.582061 -- cannot connect to the chain, skipping this update
+2019-09-29 19:30:02.983157 -- cannot connect to the chain, skipping this update
+2019-09-29 19:40:02.835008 -- cannot connect to the chain, skipping this update
+2019-09-29 19:50:02.376754 -- cannot connect to the chain, skipping this update
+2019-09-29 20:00:02.727385 -- cannot connect to the chain, skipping this update
+2019-09-29 21:20:01.909516 -- cannot connect to the chain, skipping this update
+2019-09-29 21:30:02.449402 -- cannot connect to the chain, skipping this update
+2019-09-29 21:40:01.746098 -- cannot connect to the chain, skipping this update
+2019-09-29 21:50:01.980124 -- cannot connect to the chain, skipping this update
+2019-09-29 22:00:02.426964 -- cannot connect to the chain, skipping this update
+2019-09-29 22:10:02.762959 -- cannot connect to the chain, skipping this update
+2019-09-29 22:20:02.418143 -- cannot connect to the chain, skipping this update
+2019-09-29 22:30:03.465121 -- cannot connect to the chain, skipping this update
+2019-09-29 22:40:02.208433 -- cannot connect to the chain, skipping this update
+2019-09-29 22:50:02.175542 -- cannot connect to the chain, skipping this update
+2019-09-29 23:00:02.677193 -- cannot connect to the chain, skipping this update
+2019-09-29 23:10:02.657758 -- cannot connect to the chain, skipping this update
+2019-09-29 23:20:01.787010 -- cannot connect to the chain, skipping this update
+2019-09-30 11:00:02.090828 -- cannot connect to the chain, skipping this update
+2019-09-30 11:10:01.736971 -- cannot connect to the chain, skipping this update
+2019-09-30 11:20:01.737739 -- cannot connect to the chain, skipping this update
+2019-09-30 11:30:02.724450 -- cannot connect to the chain, skipping this update
+2019-09-30 11:40:02.104566 -- cannot connect to the chain, skipping this update
+2019-09-30 11:50:02.645731 -- cannot connect to the chain, skipping this update
+2019-09-30 12:50:01.889957 -- cannot connect to the chain, skipping this update
+2019-09-30 13:00:02.591688 -- cannot connect to the chain, skipping this update
+2019-09-30 13:10:01.995229 -- cannot connect to the chain, skipping this update
+2019-09-30 13:20:01.936352 -- cannot connect to the chain, skipping this update
+2019-09-30 13:30:02.447178 -- cannot connect to the chain, skipping this update
+2019-09-30 13:40:02.028416 -- cannot connect to the chain, skipping this update
+2019-09-30 13:50:01.902321 -- cannot connect to the chain, skipping this update
+2019-09-30 14:00:02.870581 -- cannot connect to the chain, skipping this update
+2019-09-30 14:10:02.531782 -- cannot connect to the chain, skipping this update
+2019-09-30 14:20:01.692323 -- cannot connect to the chain, skipping this update
+2019-09-30 14:30:02.925760 -- cannot connect to the chain, skipping this update
+2019-09-30 14:40:02.382892 -- cannot connect to the chain, skipping this update
+2019-09-30 14:50:02.437188 -- cannot connect to the chain, skipping this update
+2019-09-30 15:00:02.300338 -- cannot connect to the chain, skipping this update
+2019-09-30 15:10:02.070976 -- cannot connect to the chain, skipping this update
+2019-09-30 15:20:01.693241 -- cannot connect to the chain, skipping this update
+2019-09-30 15:30:02.255155 -- cannot connect to the chain, skipping this update
+2019-09-30 15:40:01.937769 -- cannot connect to the chain, skipping this update
+2019-09-30 15:50:02.090962 -- cannot connect to the chain, skipping this update
+2019-09-30 16:00:02.648670 -- nothing to update
+2019-09-30 16:10:02.490980 -- cannot connect to the chain, skipping this update
+2019-09-30 16:20:02.300070 -- nothing to update
+2019-09-30 16:30:02.549912 -- cannot connect to the chain, skipping this update
+2019-09-30 16:40:02.383996 -- cannot connect to the chain, skipping this update
+2019-09-30 16:50:02.455462 -- cannot connect to the chain, skipping this update
+2019-09-30 17:00:02.778272 -- cannot connect to the chain, skipping this update
+2019-09-30 17:10:01.715121 -- cannot connect to the chain, skipping this update
+2019-09-30 17:20:02.458133 -- cannot connect to the chain, skipping this update
+2019-09-30 17:30:02.629048 -- cannot connect to the chain, skipping this update
+2019-09-30 17:40:01.895002 -- cannot connect to the chain, skipping this update
+2019-09-30 17:50:02.440655 -- nothing to update
+2019-09-30 18:00:02.919827 -- nothing to update
+2019-09-30 18:10:02.016121 -- cannot connect to the chain, skipping this update
+2019-09-30 18:20:02.443700 -- cannot connect to the chain, skipping this update
+2019-09-30 20:10:01.640936 -- cannot connect to the chain, skipping this update
+2019-09-30 20:20:02.306288 -- cannot connect to the chain, skipping this update
+2019-09-30 20:30:02.539894 -- cannot connect to the chain, skipping this update
+2019-09-30 20:40:02.092207 -- cannot connect to the chain, skipping this update
+2019-09-30 20:50:01.823385 -- cannot connect to the chain, skipping this update
+2019-09-30 21:00:03.066125 -- cannot connect to the chain, skipping this update
+2019-09-30 21:10:01.560376 -- cannot connect to the chain, skipping this update
+2019-09-30 21:20:01.813325 -- cannot connect to the chain, skipping this update
+2019-09-30 21:30:02.639882 -- cannot connect to the chain, skipping this update
+2019-09-30 21:40:02.473033 -- cannot connect to the chain, skipping this update
+2019-09-30 21:50:02.210028 -- cannot connect to the chain, skipping this update
+2019-10-01 11:20:02.811933 -- cannot connect to the chain, skipping this update
+2019-10-01 11:30:02.953527 -- cannot connect to the chain, skipping this update
+2019-10-01 12:00:46.503334 -- nothing to update
+2019-10-01 12:10:02.343118 -- cannot connect to the chain, skipping this update
+2019-10-01 12:20:01.836462 -- nothing to update
+2019-10-01 12:30:03.432819 -- cannot connect to the chain, skipping this update
+2019-10-01 12:40:01.993315 -- cannot connect to the chain, skipping this update
+2019-10-02 11:30:02.687003 -- cannot connect to the chain, skipping this update
+2019-10-02 11:40:02.253550 -- cannot connect to the chain, skipping this update
+2019-10-02 11:50:01.698800 -- cannot connect to the chain, skipping this update
+2019-10-03 10:10:02.482885 -- cannot connect to the chain, skipping this update
+2019-10-03 10:20:02.438657 -- cannot connect to the chain, skipping this update
+2019-10-03 10:30:02.552475 -- cannot connect to the chain, skipping this update
+2019-10-03 10:40:01.522774 -- cannot connect to the chain, skipping this update
+2019-10-03 10:50:02.332542 -- cannot connect to the chain, skipping this update
+2019-10-03 11:00:03.233907 -- nothing to update
+2019-10-03 11:10:01.781717 -- cannot connect to the chain, skipping this update
+2019-10-03 11:20:01.965978 -- cannot connect to the chain, skipping this update
+2019-10-03 11:30:02.506544 -- cannot connect to the chain, skipping this update
+2019-10-03 11:40:02.029023 -- cannot connect to the chain, skipping this update
+2019-10-03 14:40:02.066941 -- cannot connect to the chain, skipping this update
+2019-10-03 14:50:02.439588 -- cannot connect to the chain, skipping this update
+2019-10-03 15:00:02.099653 -- cannot connect to the chain, skipping this update
+2019-10-03 15:10:01.953748 -- cannot connect to the chain, skipping this update
+2019-10-03 15:20:01.625071 -- cannot connect to the chain, skipping this update
+2019-10-03 15:30:02.731244 -- cannot connect to the chain, skipping this update
+2019-10-03 15:40:01.569728 -- cannot connect to the chain, skipping this update
+2019-10-03 15:50:02.122285 -- cannot connect to the chain, skipping this update
+2019-10-03 16:00:02.483497 -- cannot connect to the chain, skipping this update
+2019-10-03 16:10:01.736101 -- cannot connect to the chain, skipping this update
+2019-10-03 16:20:01.818024 -- cannot connect to the chain, skipping this update
+2019-10-03 16:30:02.272059 -- cannot connect to the chain, skipping this update
+2019-10-03 16:40:01.797447 -- cannot connect to the chain, skipping this update
+2019-10-03 16:50:02.181858 -- cannot connect to the chain, skipping this update
+2019-10-03 17:00:02.918471 -- cannot connect to the chain, skipping this update
+2019-10-03 17:10:02.367500 -- cannot connect to the chain, skipping this update

@@ -1,7 +1,24 @@
 from web3 import Web3, IPCProvider 
 from decimal import Decimal
+from paywac.models import Gas_price
 import os
 import json
+
+# TODO refactor this to directly get latest price not from the table but from the website
+#      table will update every 5 or 10 minutes, but when we are actually doing a transaction we call this one
+def get_deployment_price():
+    """
+    query the gas_price table and calculate the wei value to subtract to the user
+    """
+    table_gas_price = Gas_price.query.filter_by(id=1).first()
+    # both values are expressed in gwei
+    gas_price = table_gas_price.standard_gas_price
+    contract_cost = table_gas_price.contract_cost
+    gwei_amount_to_subtract = gas_price * contract_cost 
+    wei_amount = Decimal(gwei_amount_to_subtract) * (Decimal(10) ** 9)
+
+    return gas_price, wei_amount
+
 
 def gwei_to_eth(amount):
     wei_amount = Decimal(amount) * (Decimal(10) ** 9)
@@ -12,8 +29,7 @@ def wei_to_eth(amount):
     eth_amount = Web3.fromWei(amount,'ether')
     return eth_amount
 
-# TODO the deploy method must also retrieve the actual gas price from the table once its building the transaction
-def deploy(deployer, seller, oracle, contract_time, contract_shipping_eta, item_price, shipping_price):
+def deploy(deployer, seller, oracle, contract_time, contract_shipping_eta, item_price, shipping_price, gas_price):
 
     deployer = Web3.toChecksumAddress(deployer)
     seller = Web3.toChecksumAddress(seller)
@@ -54,7 +70,7 @@ def deploy(deployer, seller, oracle, contract_time, contract_shipping_eta, item_
     transaction = Contract.constructor(deployer, seller, oracle, contract_time, contract_shipping_eta, item_price, shipping_price)\
                 .buildTransaction({'from': Web3.toChecksumAddress(from_account),\
                                     'gas' : 2000000,\
-                                    'gasPrice' : w3.toWei('10', 'gwei'),\
+                                    'gasPrice' : w3.toWei(gas_price, 'gwei'),\
                                     'nonce' : nonce })
 
     signed = w3.eth.account.signTransaction(transaction, private_key)

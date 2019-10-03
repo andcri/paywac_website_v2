@@ -57,6 +57,8 @@ class Contracts_info(db.Model, UserMixin):
     contract_end = db.Column(db.DateTime, nullable=False)
     time_item_delivered = db.Column(db.DateTime, nullable=False)
     has_buyer_paid = db.Column(db.Boolean, nullable=False)
+    item_price = db.Column(db.Float, nullable=False)
+    shipping_price = db.Column(db.Float, nullable=False)
     paid_ammount = db.Column(db.Float, nullable=False)
     refounded = db.Column(db.Boolean, nullable=False)
     ranking = db.Column(db.Integer, nullable=False)
@@ -100,6 +102,7 @@ class Button_data(db.Model, UserMixin):
     clicked = db.Column(db.Integer, nullable=False)
     button_code = db.Column(db.String(), nullable=False)
     link = db.Column(db.String(), nullable=False)
+    currency = db.Column(db.String(), nullable=False)
 
     def __repr__():
         return f"Button_data('{self.id}', '{self.uuid}', '{self.title}, '{self.seller_address}')"
@@ -112,6 +115,7 @@ class Shipping_info(db.Model, UserMixin):
     buyer_email = db.Column(db.String(), nullable=True)
     buyer_name = db.Column(db.String(), nullable=False)
     buyer_surname = db.Column(db.String(), nullable=False)
+    buyer_address = db.Column(db.String(), nullable=False)
     city = db.Column(db.String(), nullable=False)
     street = db.Column(db.String(), nullable=False)
     country = db.Column(db.String(), nullable=False)
@@ -119,7 +123,7 @@ class Shipping_info(db.Model, UserMixin):
     postal_code = db.Column(db.String(), nullable=False)
 
     def __repr__():
-        return f"Button_data('{self.id}', '{self.uuid}', '{self.seller_mail}, '{self.street}')"
+        return f"Shipping_info('{self.id}', '{self.uuid}', '{self.seller_mail}, '{self.street}')"
 
 
 # the contract info for each request
@@ -134,6 +138,7 @@ class Contracts(db.Model, UserMixin):
     owner = db.Column(db.String(), nullable=False)
     # here will be setted the contract address, the string will be empty and will be update to the real value once the contract will be deployed
     contract_address = db.Column(db.String(), nullable=False, default='')
+    buyer_address = db.Column(db.String(), nullable=False)
     seller_address = db.Column(db.String(), nullable=False)
     oracle_address = db.Column(db.Integer, nullable=False)
     deployer_address = db.Column(db.Integer, nullable=False)
@@ -145,7 +150,7 @@ class Contracts(db.Model, UserMixin):
     request_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     # this will be update once the contract will be actually deployed on the network
     deployed_date = db.Column(db.DateTime, nullable=True)
-    tracked = db.Column(db.Integer, nullable=True)
+    tracked = db.Column(db.Integer, nullable=True)    
 
     def __repr__():
         return f"Contracts('{self.id}', '{self.uuid}', '{self.title}, '{self.status}')"

@@ -72,6 +72,19 @@
                 {% endif %}
             </div>
             <div class="form-group">
+                {{ form.currency.label(class="form-control-label") }}
+                {% if form.currency.errors %}
+                    {{ form.currency(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.currency.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.currency(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
                 {{ form.item_price.label(class="form-control-label") }}
                 {% if form.item_price.errors %}
                     {{ form.item_price(class="form-control form-control-lg is-invalid") }}

@@ -43,6 +43,8 @@ def update_contract_info_cron(contract_addr):
             contract_end = Column(Integer)
             time_item_delivered = Column(Integer)
             has_buyer_paid = Column(Boolean)
+            item_price = Column(Float)
+            shipping_price = Column(Float)
             paid_ammount = Column(Float)
             refounded = Column(Boolean)
             ranking = Column(Integer)
@@ -58,7 +60,7 @@ def update_contract_info_cron(contract_addr):
         current_contract = session.query(Contracts).filter_by(contract_address = contract_addr).first()
 
         # open the contract json file
-        with open('/home/andrea/Desktop/paywac_website/paywac/static/contracts_code/build/paywac.json') as json_file:
+        with open('/home/andrea/Desktop/paywac_website_v02/paywac/static/contracts_code/build/paywac.json') as json_file:
             data = json.load(json_file)
 
         address = contract_addr
@@ -73,6 +75,8 @@ def update_contract_info_cron(contract_addr):
         time_item_delivered = datetime.fromtimestamp(Contract.functions.time_item_delivered().call())
         time_item_delivered_unix = Contract.functions.time_item_delivered().call()
         has_buyer_paid = Contract.functions.has_buyer_paid().call()
+        item_price = Web3.fromWei(Contract.functions.item_price().call(), 'ether')
+        shipping_price = Web3.fromWei(Contract.functions.shipping_price().call(), 'ether')
         # convert the paid ammount from wei to eth
         paid_ammount = float(Web3.fromWei(Contract.functions.payed_ammount().call(), 'ether'))
         refounded = Contract.functions.refounded().call()
@@ -119,14 +123,20 @@ def update_contract_info_cron(contract_addr):
             row.time_item_delivered = time_item_delivered
             row.has_buyer_paid = has_buyer_paid
             row.paid_ammount = paid_ammount
+            row.item_price = item_price
+            row.shipping_price = shipping_price
             row.refounded = refounded
             row.latest_update = latest_update
             session.commit()
+            print(str(datetime.now())+' -- updated row')
+
         except:
             row = Contracts_info(contract_address=contract_addr, contract_start=contract_start, contract_end=contract_end, time_item_delivered=time_item_delivered,\
-                                    has_buyer_paid=has_buyer_paid, paid_ammount=paid_ammount, refounded=refounded, ranking=0, latest_update=latest_update)
+                                    has_buyer_paid=has_buyer_paid, paid_ammount=paid_ammount, refounded=refounded, ranking=0, latest_update=latest_update,\
+                                        item_price=item_price, shipping_price=shipping_price)
             session.add(row)
             session.commit()
+            print(str(datetime.now())+' -- created new row')
         
         print(str(datetime.now())+' -- terminated correctly')
         session.close()
