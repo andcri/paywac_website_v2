@@ -3,6 +3,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
 from paywac import db, login_manager
 from flask_login import UserMixin
+from sqlalchemy.dialects.mysql import BIGINT
 
 
 @login_manager.user_loader
@@ -17,7 +18,7 @@ class User(db.Model, UserMixin):
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     # wac_credits represent the ammount of ether that the user has sent to the deployer(consider name change)
-    wac_credits = db.Column(db.Float, default=0)
+    wac_credits = db.Column(BIGINT(unsigned=True), default=0)
     receiving_address = db.Column(db.String(), default='')
     recharge_address = db.Column(db.String(), unique=True, nullable=True)
     

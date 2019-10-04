@@ -114,9 +114,6 @@
                     {{ form.postal_code(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
-            <!-- check the type of currency that the user will use to make the payment -->
-            <!-- if he uses eth than we dont need the info of the buyer address -->
-            <!-- if he uses theter than we need to ask for this info -->
             {% if currency == "USDT" %}
             <div class="form-group">
                 {{ form.buyer_address.label(class="form-control-label") }}
@@ -130,6 +127,10 @@
                 {% else %}
                     {{ form.buyer_address(class="form-control form-control-lg") }}
                 {% endif %}
+            </div>
+            {% else %}
+            <div class="form-group">
+                {{ form.buyer_address(type="hidden") }}
             </div>
             {% endif %}
             <div class="form-group">

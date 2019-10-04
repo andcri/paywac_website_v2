@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint,
 from flask_login import login_user, current_user, logout_user, login_required
 from paywac import db, bcrypt
 from paywac.contracts.forms import CreateContract, ButtonData, DeliverTo, ReviewAndDeploy, ShippingNumber
-from paywac.contracts.utils import gwei_to_eth, deploy, secondsToText, wei_to_eth, get_deployment_price
+from paywac.contracts.utils import gwei_to_eth, deploy, secondsToText, wei_to_eth, get_deployment_price, gwei_to_wei
 from paywac.models import Deployer, Oracle, User, Contracts_info, Button_data, Shipping_info, Contracts, Shipping_tracking, Gas_price
 from uuid import uuid4
 import os
@@ -74,7 +74,6 @@ def create_button():
         """
 
         # insert button data in the database
-        # TODO button_data add also the selected type of payment
         row = Button_data(uuid=uuid, creator_mail=current_user.email, name=form.name.data, title=form.title.data, seller_address=form.seller_address.data, contract_time=form.contract_time.data,\
                             shipping_eta=form.shipping_eta.data, item_price=form.item_price.data, shipping_price=form.shipping_price.data, clicked=0,\
                             button_code=button_html, link=link, currency = form.currency.data)
@@ -112,7 +111,7 @@ def buy():
         # check if the currency for the payment will be ethere or theter
         if row.currency == 0:
             currency = "ETH"
-            form.buyer_address.data = ''
+            form.buyer_address.data = '0x0000000000000000000000000000000000000000'
             contract_type = 0
         else:
             currency = "USDT"
@@ -161,7 +160,7 @@ def deploy_contract(uid):
     if contract is None:
         flash(Nope, 'danger')
         return redirect(url_for('main.home'))
-    
+    ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
     shipping_info = Shipping_info.query.filter_by(uuid=uid).first()
     contract_owner = contract.owner
     contract_status = contract.status
@@ -169,13 +168,17 @@ def deploy_contract(uid):
     contract_shipping_eta = contract.shipping_eta
     contract_item_price = contract.item_price
     contract_shipping_price = contract.shipping_price
+    buyer_address = contract.buyer_address
     oracle = Oracle.query.filter(Oracle.active==1).first().address
     deployer = Deployer.query.filter(Deployer.active==1).first().address
     user_wac = User.query.filter_by(email=current_user.email).first()
 
 
+    #TODO here we must make a separation between the deployment of the normal eth contract
+    #     and the erc20 token one, the separation is based on the fact that the buyer address is 
+    #     not the zero address for the erc20 one
 
-    if current_user.email == contract_owner and contract_status == 0:
+    if current_user.email == contract_owner and contract_status == 0 and buyer_address == ZERO_ADDRESS:
 
         table_gas_price = Gas_price.query.filter_by(id=1).first()
 
@@ -187,45 +190,46 @@ def deploy_contract(uid):
 
         form = ReviewAndDeploy()
         form.seller_address.data = contract.seller_address
+        
 
         if form.validate_on_submit() and user_avaiable_eth >= eth_needed_for_deployment:
 
-            gas_price, wei_ammount_to_subtract = get_deployment_price()
-
             # deploy contract on ethereum and collect response info(contract address ecc)
             try:
-
-                user_wac.wac_credits -= float(wei_ammount_to_subtract)
-                db.session.add(user_wac)
-                db.session.commit()              
 
                 tx_receipt = deploy(deployer, form.seller_address.data, oracle, contract_time, contract_shipping_eta, contract_item_price,\
                                     contract_shipping_price, gas_price)
 
                 contract_address = tx_receipt.get('contractAddress')
-                # get the transaction status, 1 if the transaction succede, 0 if not, if we have a 0
-                # an error will be reported
                 transaction_status = tx_receipt.get('status')
-                # get the block where the transaction is inside
                 block_number = tx_receipt.get('blockNumber')
-                # the gas used for the transaction
                 gas_used = tx_receipt.get('gasUsed')
+                
+                new_user_balance = user_wac.wac_credits - int(gwei_to_wei(gas_used * gas_price))
+
 
                 if transaction_status == 0:
                     # there was an error with the transaction that creates the contract, in this case we will signal the error to the user
-                    # and an email with priority max will be sent to the tech support to fix the issue
+                    # and an email contating the tx_receipt 
+                    # with priority max will be sent to the tech support to fix the issue
+                    user_wac.wac_credits = new_user_balance
+                    db.session.add(user_wac)
+                    db.session.commit()
+                    print("credits after contract not deployed:", user_wac.wac_credits)
                     flash("Contract creation went wrong", 'danger')
                     return redirect(url_for('main.home'))
 
+
+                user_wac.wac_credits = new_user_balance
+                db.session.add(user_wac)
                 # change status from 0 to 1
                 contract.status = 1
                 contract.contract_address = contract_address
-                contract.deployed_date = datetime.now()
+                contract.deployed_date = datetime.now() 
+                db.session.add(contract)
                 db.session.commit()
                 
-                # execute the cronjob funcion one time manually to have immediately some data to display
-                # TO BE TESTED
-                
+
                 # create cronjob for that reads the data inside the contract and insert it into the database
                 try:
                     cron = CronTab(user='andrea')
@@ -244,9 +248,6 @@ def deploy_contract(uid):
 
             except:
 
-                user_wac.wac_credits += float(wei_ammount_to_subtract)
-                db.session.add(user_wac)
-                db.session.commit()
                 flash("Error Deploying the contract","danger")
 
         elif form.validate_on_submit() and eth_needed_for_deployment < user_wac.wac_credits:
@@ -257,6 +258,10 @@ def deploy_contract(uid):
                                 contract_time=secondsToText(contract.contract_time), shipping_eta=secondsToText(contract.shipping_eta), item_price=contract.item_price, shipping_price=contract.shipping_price,\
                                     city=shipping_info.city, street=shipping_info.street, country=shipping_info.country, state=shipping_info.state, postal_code=shipping_info.postal_code,\
                                         name=shipping_info.buyer_name, surname=shipping_info.buyer_surname, deployments_avaiables=round(deployments_avaiables))
+    
+    elif current_user.email == contract_owner and contract_status == 0 and buyer_address != ZERO_ADDRESS:
+        return redirect(url_for("main.home"))        
+
     elif current_user.email == contract_owner and contract_status != 0:
         flash("This contract has already been deployed")
         return redirect(url_for('main.home'))

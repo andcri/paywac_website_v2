@@ -6,6 +6,8 @@ import json
 
 # TODO refactor this to directly get latest price not from the table but from the website
 #      table will update every 5 or 10 minutes, but when we are actually doing a transaction we call this one
+# IMPORTANT: there will be a try and except, if we cannot retrieve the live gas price via a direct api
+#            call we will use the value saved in the database
 def get_deployment_price():
     """
     query the gas_price table and calculate the wei value to subtract to the user
@@ -13,12 +15,12 @@ def get_deployment_price():
     table_gas_price = Gas_price.query.filter_by(id=1).first()
     # both values are expressed in gwei
     gas_price = table_gas_price.standard_gas_price
-    contract_cost = table_gas_price.contract_cost
-    gwei_amount_to_subtract = gas_price * contract_cost 
-    wei_amount = Decimal(gwei_amount_to_subtract) * (Decimal(10) ** 9)
 
-    return gas_price, wei_amount
+    return gas_price 
 
+def gwei_to_wei(ammount):
+    wei_amount = Decimal(ammount) * (Decimal(10) ** 9)
+    return wei_amount
 
 def gwei_to_eth(amount):
     wei_amount = Decimal(amount) * (Decimal(10) ** 9)
