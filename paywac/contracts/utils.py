@@ -82,6 +82,60 @@ def deploy(deployer, seller, oracle, contract_time, contract_shipping_eta, item_
     print(tx_receipt)
     return tx_receipt
 
+
+def deploy_erc20(buyer, seller, oracle, token_address, contract_time, contract_shipping_eta, shipping_price, item_price, gas_price):
+    buyer = Web3.toChecksumAddress(buyer)
+    seller = Web3.toChecksumAddress(seller)
+    oracle = Web3.toChecksumAddress(oracle)
+    token_address = Web3.toChecksumAddress(token_address)
+
+    # Right now this is the conversion needed to use with Pcoin
+    # TODO convert price to proper USDT format, need to research that
+    item_price = int(item_price * 1000)
+    shipping_price = int(shipping_price * 1000)
+
+    # load json file
+    with open('paywac/static/contracts_code/build/paywac_erc20.json') as json_file:
+        data = json.load(json_file)
+
+    abi = data['abi']
+
+    bytecode = data['bytecode']
+
+    # connect to the rinkeby endpoint
+    w3 = Web3(IPCProvider('/home/andrea/.ethereum/rinkeby/geth.ipc'))
+
+    Contract = w3.eth.contract(abi=abi, bytecode=bytecode)
+
+    # set the account that will deploy the contract
+    from_account = "0xb773c20a88c56f4458ae6ddb3e542ac60e4b9f8f"
+    # load password json file
+    with open('paywac/static/rinkeby_data/rinkeby_passwords.json') as pwd_file:
+        password_data = json.load(pwd_file)
+
+    password = password_data[from_account]
+
+    with open('/home/andrea/.ethereum/rinkeby/keystore/UTC--2019-09-03T12-19-47.104595283Z--b773c20a88c56f4458ae6ddb3e542ac60e4b9f8f') as keyfile:
+        encrypted_key = keyfile.read()
+        private_key = w3.eth.account.decrypt(encrypted_key, password)
+
+    nonce = w3.eth.getTransactionCount(Web3.toChecksumAddress(from_account))
+
+    # build transaction
+    transaction = Contract.constructor(buyer, seller, oracle, token_address, contract_time, contract_shipping_eta, shipping_price, item_price)\
+                .buildTransaction({'from': Web3.toChecksumAddress(from_account),\
+                                    'gas' : 2000000,\
+                                    'gasPrice' : w3.toWei(gas_price, 'gwei'),\
+                                    'nonce' : nonce })
+
+    signed = w3.eth.account.signTransaction(transaction, private_key)
+    tx_hash = w3.eth.sendRawTransaction(signed.rawTransaction)
+
+    tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+    print(tx_receipt)
+    return tx_receipt
+
+
 def secondsToText(secs):
     days = secs//86400
     hours = (secs - days*86400)//3600

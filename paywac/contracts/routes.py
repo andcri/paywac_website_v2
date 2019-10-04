@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint,
 from flask_login import login_user, current_user, logout_user, login_required
 from paywac import db, bcrypt
 from paywac.contracts.forms import CreateContract, ButtonData, DeliverTo, ReviewAndDeploy, ShippingNumber
-from paywac.contracts.utils import gwei_to_eth, deploy, secondsToText, wei_to_eth, get_deployment_price, gwei_to_wei
+from paywac.contracts.utils import gwei_to_eth, deploy, secondsToText, wei_to_eth, get_deployment_price, gwei_to_wei, deploy_erc20
 from paywac.models import Deployer, Oracle, User, Contracts_info, Button_data, Shipping_info, Contracts, Shipping_tracking, Gas_price
 from uuid import uuid4
 import os
@@ -161,6 +161,7 @@ def deploy_contract(uid):
         flash(Nope, 'danger')
         return redirect(url_for('main.home'))
     ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
+    TOKEN_ADDRESS = "0x8ECEbbAc35822D2ddeAd001D5Bb4A8C2d49214F0"
     shipping_info = Shipping_info.query.filter_by(uuid=uid).first()
     contract_owner = contract.owner
     contract_status = contract.status
@@ -172,11 +173,6 @@ def deploy_contract(uid):
     oracle = Oracle.query.filter(Oracle.active==1).first().address
     deployer = Deployer.query.filter(Deployer.active==1).first().address
     user_wac = User.query.filter_by(email=current_user.email).first()
-
-
-    #TODO here we must make a separation between the deployment of the normal eth contract
-    #     and the erc20 token one, the separation is based on the fact that the buyer address is 
-    #     not the zero address for the erc20 one
 
     if current_user.email == contract_owner and contract_status == 0 and buyer_address == ZERO_ADDRESS:
 
@@ -260,7 +256,91 @@ def deploy_contract(uid):
                                         name=shipping_info.buyer_name, surname=shipping_info.buyer_surname, deployments_avaiables=round(deployments_avaiables))
     
     elif current_user.email == contract_owner and contract_status == 0 and buyer_address != ZERO_ADDRESS:
-        return redirect(url_for("main.home"))        
+        
+        table_gas_price = Gas_price.query.filter_by(id=1).first()
+
+        gas_price = table_gas_price.standard_gas_price
+        contract_cost = 669764 # now hardcoded, later we can make this a call to the database
+        user_avaiable_eth = wei_to_eth(user_wac.wac_credits)
+        eth_needed_for_deployment = gwei_to_eth(gas_price * contract_cost)
+        deployments_avaiables = user_avaiable_eth / eth_needed_for_deployment
+
+        form = ReviewAndDeploy()
+        form.seller_address.data = contract.seller_address
+
+##################### START NEW CONTRACT LOGIC ##################################
+
+        if form.validate_on_submit() and user_avaiable_eth >= eth_needed_for_deployment:
+
+            # deploy contract on ethereum and collect response info(contract address ecc)
+            # try:
+
+            # TODO think where in the database to store the token address
+            tx_receipt = deploy_erc20(buyer_address, form.seller_address.data, oracle, TOKEN_ADDRESS, contract_time, contract_shipping_eta,\
+                                        contract_shipping_price, contract_item_price, gas_price)
+
+            contract_address = tx_receipt.get('contractAddress')
+            transaction_status = tx_receipt.get('status')
+            block_number = tx_receipt.get('blockNumber')
+            gas_used = tx_receipt.get('gasUsed')
+            
+            new_user_balance = user_wac.wac_credits - int(gwei_to_wei(gas_used * gas_price))
+
+
+            if transaction_status == 0:
+                # there was an error with the transaction that creates the contract, in this case we will signal the error to the user
+                # and an email contating the tx_receipt 
+                # with priority max will be sent to the tech support to fix the issue
+                user_wac.wac_credits = new_user_balance
+                db.session.add(user_wac)
+                db.session.commit()
+                print("credits after contract not deployed:", user_wac.wac_credits)
+                flash("Contract creation went wrong", 'danger')
+                return redirect(url_for('main.home'))
+
+
+            user_wac.wac_credits = new_user_balance
+            db.session.add(user_wac)
+            # change status from 0 to 1
+            contract.status = 1
+            contract.contract_address = contract_address
+            contract.deployed_date = datetime.now() 
+            db.session.add(contract)
+            db.session.commit()
+            
+
+            # create cronjob for that reads the data inside the contract and insert it into the database
+            # TODO this will need to be updated to a new cronjob that call a specific contract for the erc20 contract
+            try:
+               cron = CronTab(user='andrea')
+               job = cron.new(command=f'/home/andrea/anaconda3/envs/vyper/bin/python /home/andrea/Desktop/paywac_website_v02/cronjob_scripts/cron_update_info_paywac_erc20.py {contract_address} >> /home/andrea/Desktop/paywac_website_v02/logs/cron.log_{contract_address} 2>&1')
+               job.minute.every(15)
+ 
+               cron.write()
+            except:
+               print("error creating the cronjob for the newly deployed contract")
+
+            flash(f'Contract Deployed successfully at address {contract_address}', 'success')
+            flash('It may take up to 15 minutes to be able to see the contract in the website', 'success')
+
+            # TODO send email notification to the buyer
+            return redirect(url_for('main.home'))
+
+            # except:
+
+            #     flash("Error Deploying the contract","danger")
+
+        elif form.validate_on_submit() and eth_needed_for_deployment < user_wac.wac_credits:
+            flash('You dont have enough founds to deploy a contract','warning')
+            # TODO add instructions to add tokens for contract deployment
+        
+        return render_template('deploy_contract.html', form=form, uuid=uid, insertion_link=contract.name, insertion_title=contract.title, seller_address=contract.seller_address,\
+                                contract_time=secondsToText(contract.contract_time), shipping_eta=secondsToText(contract.shipping_eta), item_price=contract.item_price,\
+                                    shipping_price=contract.shipping_price, city=shipping_info.city, street=shipping_info.street, country=shipping_info.country,\
+                                        state=shipping_info.state, postal_code=shipping_info.postal_code, name=shipping_info.buyer_name, surname=shipping_info.buyer_surname,\
+                                            deployments_avaiables=round(deployments_avaiables))
+
+############## END NEW CONTRACT LOGIC #######################
 
     elif current_user.email == contract_owner and contract_status != 0:
         flash("This contract has already been deployed")
