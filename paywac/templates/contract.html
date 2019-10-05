@@ -3,9 +3,15 @@
 <article class="media content-section" style="background-image: url('../static/images/background1.jpg');">
     <div class="media-body">
         <div class="row justify-content-md-center">
+            {% if currency == "0x0000000000000000000000000000000000000000" %}
             <div class="col col-lg">
                 <img src="../static/images/ehtereum-color.png" style="width: 90%">
             </div>
+            {% else %}
+            <div class="col col-lg">
+                <img class="float-left" src="../static/images/theter.png"  width="70" height="70">
+            </div>
+            {% endif %}
             <div class="col col-auto">
                 Title
                 <p>
@@ -88,7 +94,17 @@
         </div>
         <div class="row justify-content-md-center">
             <div class="col col-lg">
-                {{ status }}
+                {% if status == 1%}
+                    Waiting for Payment
+                {% elif status == 2 and tracked != 1%}
+                    Item Paid and Waiting for Shipping
+                {% elif status == 2 and tracked == 1%}
+                    Item Paid and Shipped
+                {% elif status == 3%}
+                    Item Delivered
+                {% elif status == 4%}
+                    Item Refounded
+                {% endif %}
             </div>
             <div class="col col-auto">
                 
@@ -96,6 +112,16 @@
             <div class="col col-lg">
                 {{ latest_update }}
             </div>
+        </div>
+        <p></p>
+        <div class="row justify-content-md-center">
+            <div class="col col-lg">
+                {% if status == 1%}
+                    <button class="btn btn-info">Payment Instructions</button>
+                {% endif %}
+            </div>
+            <div class="col col-auto"></div>
+            <div class="col col-lg"></div>
         </div>
         <!-- Here i start to put info based on the status -->
     </div>

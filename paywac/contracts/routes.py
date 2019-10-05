@@ -27,6 +27,8 @@ def contract(address):
     price = row.item_price
     shipping_price = row.shipping_price
     status = row.status
+    currency = row.buyer_address
+    tracked = row.tracked
 
     # data from the contracts info
     row_info = Contracts_info.query.filter_by(contract_address=address).first()
@@ -42,7 +44,7 @@ def contract(address):
 
     return render_template('contract.html', contract_start=contract_start, contract_end=contract_end, time_item_delivered=time_item_delivered,\
                             has_buyer_paid=has_buyer_paid, ranking=ranking, status=status, title=contract_title, contract_address=contract_address,\
-                                latest_update=latest_update, item_price=item_price, shipping_price=shipping_price)
+                                latest_update=latest_update, item_price=item_price, shipping_price=shipping_price, currency=currency, tracked=tracked)
 
 
 # generate the html code for a button that will be embedded to a third party website to create a request for a new contract
@@ -354,7 +356,8 @@ def deploy_contract(uid):
 @contracts.route("/my_contracts", methods=['GET', 'POST'])
 @login_required
 def my_contracts():
-    rows = Contracts.query.filter_by(owner=current_user.email).order_by(Contracts.request_created.desc()).all()
+    page = request.args.get('page', 1, type=int)
+    rows = Contracts.query.filter_by(owner=current_user.email).order_by(Contracts.request_created.desc()).paginate(page=page, per_page=20)
     shipping_info_row = Shipping_info.query.filter_by(seller_email=current_user.email).all()
     
     form = ShippingNumber()
@@ -380,7 +383,8 @@ def my_contracts():
 @contracts.route("/my_buttons")
 @login_required
 def my_buttons():
-    rows = Button_data.query.filter_by(creator_mail=current_user.email).order_by(Button_data.id.desc()).all()
+    page = request.args.get('page', 1, type=int)
+    rows = Button_data.query.filter_by(creator_mail=current_user.email).order_by(Button_data.id.desc()).paginate(page=page, per_page=20)
     return render_template('my_buttons.html', buttons=rows)
 
 # this can be called only from the seller and will allow him to reject the contract creation after a user

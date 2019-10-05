@@ -1,2 +1,18 @@
 2019-10-04 18:45:03.259305 -- created new row
 2019-10-04 18:45:03.259354 -- terminated correctly
+2019-10-04 19:00:03.128682 -- cannot connect to the chain, skipping this update
+2019-10-04 22:30:02.818209 -- cannot connect to the chain, skipping this update
+2019-10-04 22:45:02.880946 -- cannot connect to the chain, skipping this update
+2019-10-04 23:00:02.553160 -- cannot connect to the chain, skipping this update
+2019-10-04 23:15:02.862198 -- cannot connect to the chain, skipping this update
+2019-10-04 23:30:02.769955 -- cannot connect to the chain, skipping this update
+2019-10-04 23:45:03.080096 -- cannot connect to the chain, skipping this update
+2019-10-05 13:30:02.941809 -- cannot connect to the chain, skipping this update
+2019-10-05 13:45:03.299635 -- cannot connect to the chain, skipping this update
+2019-10-05 14:00:02.356938 -- cannot connect to the chain, skipping this update
+2019-10-05 14:15:02.639857 -- cannot connect to the chain, skipping this update
+2019-10-05 14:30:02.375136 -- cannot connect to the chain, skipping this update
+2019-10-05 14:45:02.998952 -- cannot connect to the chain, skipping this update
+2019-10-05 15:00:02.690093 -- cannot connect to the chain, skipping this update
+2019-10-05 15:15:02.281745 -- updated row
+2019-10-05 15:15:02.281773 -- terminated correctly

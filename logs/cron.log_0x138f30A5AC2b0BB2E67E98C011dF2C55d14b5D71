@@ -274,3 +274,19 @@ NameError: name 'now' is not defined
 2019-10-04 18:30:02.372036 -- terminated correctly
 2019-10-04 18:45:03.161000 -- updated row
 2019-10-04 18:45:03.161088 -- terminated correctly
+2019-10-04 19:00:03.078521 -- cannot connect to the chain, skipping this update
+2019-10-04 22:30:02.848590 -- cannot connect to the chain, skipping this update
+2019-10-04 22:45:02.869673 -- cannot connect to the chain, skipping this update
+2019-10-04 23:00:02.588582 -- cannot connect to the chain, skipping this update
+2019-10-04 23:15:02.878013 -- cannot connect to the chain, skipping this update
+2019-10-04 23:30:02.876116 -- cannot connect to the chain, skipping this update
+2019-10-04 23:45:03.106744 -- cannot connect to the chain, skipping this update
+2019-10-05 13:30:02.898813 -- cannot connect to the chain, skipping this update
+2019-10-05 13:45:03.360555 -- cannot connect to the chain, skipping this update
+2019-10-05 14:00:02.436496 -- cannot connect to the chain, skipping this update
+2019-10-05 14:15:02.559764 -- cannot connect to the chain, skipping this update
+2019-10-05 14:30:02.358030 -- cannot connect to the chain, skipping this update
+2019-10-05 14:45:02.966910 -- cannot connect to the chain, skipping this update
+2019-10-05 15:00:02.737803 -- cannot connect to the chain, skipping this update
+2019-10-05 15:15:02.307084 -- updated row
+2019-10-05 15:15:02.307130 -- terminated correctly

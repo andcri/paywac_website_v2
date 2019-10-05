@@ -10,23 +10,34 @@
         Fulfilled</button>
 </div>
 <p></p>
-{% for button in buttons%}
+{% for button in buttons.items%}
 {% if button.clicked == 0 %}
 <div class="active_button">
     <article class="media content-section">
             <div class="media-body">
-            <h5><span class="article-title">{{ button.title }}</span></h5>
+                {% if button.currency == 0 %}
+                    <img class="float-left" src="../static/images/ethereum.png"  width="60" height="100">
+                {% else %}
+                    <img class="float-left" src="../static/images/theter.png"  width="70" height="70">
+                {% endif %}
+                <div class="row justify-content-md-center">
+                <div class="col col-md-auto"></div>                
+                <div class="col col-md-auto">
+                    <h5><span class="article-title">{{ button.title }}</span></h5>
+                </div>
+                <div class="col col-md-auto"></div>
+            </div>
             <div>
                 <textarea style="opacity: 0" readonly id="generated_code_{{button.title}}">{{ button.button_code }}</textarea>
                 <textarea style="opacity: 0" readonly id="generated_code_{{button.link}}">{{ button.link }}</textarea>
             </div>
-            <div class="row">
-                <div class="col col-md-3"></div>
-                <div class="col col-md-3"></div>
+            <div class="row justify-content-md-center">
+                <div class="col col-md-auto"></div>                
                 <div class="col col-md-auto">
                     <button class="btn btn-primary" onclick='myFunction("{{button.title}}")'>Copy button code</button>
                     <button class="btn btn-primary" onclick='myFunction("{{button.link}}")'>Copy link</button>
                 </div>
+                <div class="col col-md-auto"></div>
             </div>
             </div>
 
@@ -36,24 +47,45 @@
 <div class="fulfilled_button">
         <article class="media content-section">
                 <div class="media-body">
-                <h5><span class="article-title">{{ button.title }}</span></h5>
+                    <div class="media-body">
+                        {% if button.currency == 0 %}
+                            <img class="float-left" src="../static/images/ethereum.png"  width="60" height="100">
+                        {% else %}
+                            <img class="float-left" src="../static/images/theter.png"  width="70" height="70">
+                        {% endif %}
+                        <div class="row justify-content-md-center">
+                        <div class="col col-md-auto"></div>                
+                        <div class="col col-md-auto">
+                            <h5><span class="article-title">{{ button.title }}</span></h5>
+                        </div>
+                        <div class="col col-md-auto"></div>
+                    </div>
+                    <div>
                 <div>
                     <textarea style="opacity: 0" readonly id="generated_code_{{button.title}}">{{ button.button_code }}</textarea>
                     <textarea style="opacity: 0" readonly id="generated_code_{{button.link}}">{{ button.link }}</textarea>
                 </div>
-                <div class="row">
-                    <div class="col col-md-3"></div>
-                    <div class="col col-md-3"></div>
+                <div class="row justify-content-md-center">
+                    <div class="col col-md-auto"></div>                    
                     <div class="col col-md-auto">
                         <button class="btn btn-primary" onclick='myFunction("{{button.title}}")'>Copy button code</button>
                         <button class="btn btn-primary" onclick='myFunction("{{button.link}}")'>Copy link</button>
                     </div>
+                    <div class="col col-md-auto"></div>
                 </div>
                 </div>
     
         </article>
 </div>
 {% endif %}
+{% endfor %}
+
+{% for page_num in buttons.iter_pages() %}
+  {% if page_num %}
+    <a class="btn btn-outline-info mb-3" href="{{ url_for('contracts.my_buttons', page=page_num)}}">{{page_num}}</a>
+  {% else %}
+    ...
+  {% endif %}
 {% endfor %}
 
 <script>
