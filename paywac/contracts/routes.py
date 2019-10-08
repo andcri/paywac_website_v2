@@ -5,9 +5,10 @@ from paywac.contracts.forms import CreateContract, ButtonData, DeliverTo, Review
 from paywac.contracts.utils import gwei_to_eth, deploy, secondsToText, wei_to_eth, get_deployment_price, gwei_to_wei, deploy_erc20
 from paywac.models import Deployer, Oracle, User, Contracts_info, Button_data, Shipping_info, Contracts, Shipping_tracking, Gas_price
 from uuid import uuid4
-import os
 from crontab import CronTab
 from datetime import datetime, timedelta
+import os
+import json
 
 contracts = Blueprint('contracts', __name__)
 
@@ -17,6 +18,13 @@ def contract(address):
     given a contract address it will display the details of the contract reading
     from the contract_info table
     """
+    # get contract abi string
+    with open('/home/andrea/Desktop/paywac_website_v02/paywac/static/contracts_code/build/paywac.json') as paywac_builded:
+        data = json.load(paywac_builded)
+    with open('/home/andrea/Desktop/paywac_website_v02/paywac/static/contracts_code/build/paywac_erc20.json') as paywac_erc20_builded:
+        data_erc20 = json.load(paywac_erc20_builded)
+    paywac_abi = data['abi']
+    paywac_erc20_abi = data_erc20['abi'] 
     # data from the contracts deployed
     row = Contracts.query.filter_by(contract_address=address).first()
 
@@ -44,7 +52,8 @@ def contract(address):
 
     return render_template('contract.html', contract_start=contract_start, contract_end=contract_end, time_item_delivered=time_item_delivered,\
                             has_buyer_paid=has_buyer_paid, ranking=ranking, status=status, title=contract_title, contract_address=contract_address,\
-                                latest_update=latest_update, item_price=item_price, shipping_price=shipping_price, currency=currency, tracked=tracked)
+                                latest_update=latest_update, item_price=item_price, shipping_price=shipping_price, currency=currency, tracked=tracked,\
+                                    paywac_abi=paywac_abi, paywac_erc20_abi=paywac_erc20_abi)
 
 
 # generate the html code for a button that will be embedded to a third party website to create a request for a new contract

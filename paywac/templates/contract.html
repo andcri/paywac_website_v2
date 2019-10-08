@@ -9,7 +9,7 @@
             </div>
             {% else %}
             <div class="col col-lg">
-                <img class="float-left" src="../static/images/theter.png"  width="70" height="70">
+                <img class="float-left" src="../static/images/theter_bkg.png"  width="170" height="100">
             </div>
             {% endif %}
             <div class="col col-auto">
@@ -17,21 +17,15 @@
                 <p>
                     {{ title }}
                 </p>
-                <!-- <p>{{ contract_start }}</p>
-                Contract will end
-                <p>{{ contract_end }}</p>
-                Time of delivery
-                <p>{{ time_item_delivered }}</p>
+               
+                <!-- here the hidden abi, i pass it here from the backend -->
                 
-                <p>{{ has_buyer_paid }}</p>
-                <p>{{ paid_ammount }}</p>
-                <p>{{ refounded }}</p>
-                <p>{{ ranking }}</p> -->
                 <p></p>
                 Address<br>
                 {{ contract_address }}
             </div>
             <div class="col col-lg">
+                <button class="btn btn-primary" onclick="copyABI()">Copy Contract ABI</button>
             </div>
         </div>
         <p></p>
@@ -126,4 +120,27 @@
         <!-- Here i start to put info based on the status -->
     </div>
 </article>
+
+{% if currency == "0x0000000000000000000000000000000000000000" %}
+    <textarea style="opacity: 0" readonly id="abi">{{ paywac_abi }}</textarea>
+{% else %}
+    <textarea style="opacity: 0" readonly id="abi">{{ paywac_erc20_abi }}</textarea>
+{% endif %}
+<script>
+    function copyABI(){
+        /* Get the text field */
+        var copyText = document.getElementById("abi");
+
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+
+        /* Alert the copied text */
+        alert("Copied the text: " + copyText.value);
+    }
+</script>
+
 {% endblock content %}

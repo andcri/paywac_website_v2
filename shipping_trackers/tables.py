@@ -4,7 +4,7 @@ contains all the tables that we will access in the shipping_tracker module
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Date, Float, create_engine
+from sqlalchemy import Column, Integer, String, Date, Float, create_engine, DateTime
 import json
 
 Base = declarative_base()
@@ -56,3 +56,11 @@ class Contracts(Base):
     status = Column(Integer)
     request_created = Column(DateTime)
     deployed_date = Column(DateTime)
+    buyer_address = Column(String)
+
+class Oracle(Base):
+    __tablename__="oracle"
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    address = Column(String)
+    active = Column(Integer)

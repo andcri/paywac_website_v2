@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from paywac import db, bcrypt
-from paywac.models import User, Gas_price
+from paywac.models import User, Gas_price, Contracts_types
 from paywac.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
                                    RequestResetForm, ResetPasswordForm)
 from paywac.users.utils import save_picture, send_reset_email
@@ -67,14 +67,20 @@ def account():
     add_founds_address = current_user.recharge_address
     table_gas_price = Gas_price.query.filter_by(id=1).first()
     gas_price = table_gas_price.standard_gas_price
-    contract_cost = table_gas_price.contract_cost
+    contract_cost = Contracts_types.query.filter_by(id=1).first().gas_needed_for_deployment
+    contract_erc20_cost = Contracts_types.query.filter_by(id=2).first().gas_needed_for_deployment
     user_avaiable_eth = wei_to_eth(current_user.wac_credits)
+
     eth_needed_for_deployment = gwei_to_eth(gas_price * contract_cost)
+    eth_needed_for_erc20_deployment = gwei_to_eth(gas_price * contract_erc20_cost)
+
     deployments_avaiables = user_avaiable_eth / eth_needed_for_deployment
+    deployments_erc20_avaiables = user_avaiable_eth / eth_needed_for_erc20_deployment
 
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form, add_founds=add_founds_address, user_avaiable_eth=user_avaiable_eth,\
-                                deployments_avaiables=floor(deployments_avaiables))
+                                deployments_avaiables=floor(deployments_avaiables), deployments_erc20_avaiables=floor(deployments_erc20_avaiables),\
+                                    gas_price = gas_price)
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])

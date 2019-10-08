@@ -13,7 +13,9 @@
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Account Info</legend>
                 <div class='form-group'>Eth avaiable to deployer: {{ user_avaiable_eth }} </div>
-                <div class='form-group'>Contracts Deployable at current gas price: {{ deployments_avaiables }} </div>
+                <div class='form-group'>Gas price: {{ gas_price }} </div>
+                <div class='form-group'>Contracts (Ether) Deployable at current gas price: {{ deployments_avaiables }} </div>
+                <div class='form-group'>Contracts (Theter) Deployable at current gas price: {{ deployments_erc20_avaiables }} </div>
                 <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#addFoundsModal">Add ETH to the Deployer</button>
                 <div class="form-group"></div>
                 <div class="form-group">

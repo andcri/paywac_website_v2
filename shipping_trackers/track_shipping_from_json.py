@@ -53,7 +53,7 @@ session = Session()
 
 shipping_tracking = session.query(Shipping_tracking).filter_by(tracking_number=tracking_number).first()
 shipping_info = session.query(Shipping_info).filter_by(uuid=shipping_tracking.uuid).first()
-
+# IMPORTANT THE SHIPPING UUID IS THE ONE THAT WILL BE PASSED TO THE ORACLE TRIGGER
 # 2 -- start logic
 
 # TODO (with the real thing)call the dhl api and check for an answer, if an answer is not being received yet dont do anything and wait for next cronjob iteration
